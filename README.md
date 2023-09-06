@@ -28,3 +28,6 @@
 |------------------------------|------------------------------------|
 | lightshowregion.blacklist.*  | All rights to manage the blacklist |
 | lightshowregion.*            | Full access to the plugin          |
+
+## › PLACEHOLDERS:
+- #### %lightshowregion_custom% - Displays information about free, occupied or your territory
