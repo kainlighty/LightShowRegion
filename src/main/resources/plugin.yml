@@ -1,0 +1,54 @@
+name: LightShowRegion
+version: '${project.version}'
+main: ru.kainlight.lightshowregion.Main
+api-version: 1.16
+depend: [ PlaceholderAPI ]
+loadbefore: [ PlaceholderAPI ]
+authors: [ kainlight ]
+description: Show Region Name in Actionbar
+website: vk.com/kainlight
+
+commands:
+  lightshowregion:
+    aliases:
+      - lsr
+
+permissions:
+  lightshowregion.help:
+    default: op
+  lightshowregion.toggle:
+    default: op
+  lightshowregion.add:
+    default: op
+  lightshowregion.remove:
+    default: op
+  lightshowregion.blacklist.add:
+    default: op
+  lightshowregion.blacklist.remove:
+    default: op
+  lightshowregion.global:
+    default: op
+  lightshowregion.reload.config:
+    default: op
+  lightshowregion.reload.bar:
+    default: op
+  lightshowregion.blacklist.*:
+    default: op
+    children:
+      lightshowregion.blacklist.add: true
+      lightshowregion.blacklist.remove: true
+  lightshowregion.reload.*:
+    default: op
+    children:
+      lightshowregion.reload.config: true
+      lightshowregion.reload.bar: true
+  lightshowregion.*:
+    default: op
+    children:
+      lightshowregion.help: true
+      lightshowregion.toggle: true
+      lightshowregion.add: true
+      lightshowregion.remove: true
+      lightshowregion.blacklist.*: true
+      lightshowregion.global: true
+      lightshowregion.reload.*: true

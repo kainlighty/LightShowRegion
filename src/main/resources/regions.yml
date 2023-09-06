@@ -1,0 +1,5 @@
+# Renaming regions, for example the "spawn" region will be output as &6SPAWN
+# If you put a sign "!" before the name, then the message output will not affect the message from "region" to "messages"
+custom:
+  regionWithoutCommonText: "!TEST REGION" # = TEST REGION
+  regionWithCommonText: "TEST REGION" # = You are located in the region TEST

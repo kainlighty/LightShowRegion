@@ -1,0 +1,11 @@
+update-notification: true
+
+main-settings:
+  lang: RUSSIAN
+
+region-settings:
+  hide-global-region: false
+  disabled-worlds:
+    - test
+  blacklist:
+    - test

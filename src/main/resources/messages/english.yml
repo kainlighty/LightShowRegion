@@ -1,0 +1,22 @@
+region:
+  toggle:
+    enabled: "&aDisplay region successfully enabled"
+    disabled: "&aDisplay region successfully disabled"
+  added: "Region &c<region> &fadded with name <name>"
+  removed: "Region &c<region> &fremoved"
+  exists: "Region &c<region> &falready exists"
+  notFound: "Region &c<region> &fnot found"
+  blacklist:
+    added: "Region &c<region> &fhas been &cblacklisted"
+    removed: "Region &c<region> &fwas removed from the &cblacklist"
+  global: "&aGlobal region display changed"
+  reload:
+    config: "&aConfigurations reloaded"
+    bar: "&aActionBar reloaded for all players"
+
+actionbar:
+  region: "&6&lYOU ARE LOCATED IN THE REGION <region>"
+  blacklisted: "&4&lTHIS REGION IS BLACKLISTED"
+  global: "&e&lFREE TERRITORY"
+  your: "&a&lYOUR TERRITORY"
+  not-your: "&c&lOCCUPIED TERRITORY"

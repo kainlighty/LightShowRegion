@@ -1,0 +1,22 @@
+region:
+  toggle:
+    enabled: "&aОтображение региона включено"
+    disabled: "&aОтображение региона выключено"
+  added: "Регион &c<region> &fдобавлен с именем <name>"
+  removed: "Регион &c<region> &fудалён"
+  exists: "Регион &c<region> &fуже существует"
+  notFound: "Регион &c<region> &fне найден"
+  blacklist:
+    added: "Регион &c<region> &fбыл добавлен в &cчерный список"
+    removed: "Регион &c<region> &fбыл удалён из &cчерного списока"
+  global: "&aОтображение глобального региона изменено"
+  reload:
+    config: "&aКонфигурация успешно перезагружена"
+    bar: "&aActionBar успешно перезагружен у всех игроков"
+
+actionbar:
+  region: "&6&lВЫ НАХОДИТЕСЬ В РЕГИОНЕ <region>"
+  blacklisted: "&4&lРЕГИОН ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК"
+  global: "&e&lСВОБОДНАЯ ТЕРРИТОРИЯ"
+  your: "&a&lВАША ТЕРРИТОРИЯ"
+  not-your: "&c&lЗАНЯТАЯ ТЕРРИТОРИЯ"
