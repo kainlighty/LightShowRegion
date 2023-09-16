@@ -1,4 +1,4 @@
-package ru.kainlight.lightshowregion.CONFIGS;
+package ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +34,7 @@ public final class CustomConfig {
         saveDefaultConfig();
     }
 
+
     public void saveDefaultConfig() {
         if (configFile == null) {
             if (subdirectory == null) {
@@ -46,6 +47,7 @@ public final class CustomConfig {
                 configFile = new File(subdirectoryFile, fileName);
             }
         }
+
         if (!configFile.exists()) {
             if (subdirectory != null) {
                 plugin.saveResource(subdirectory + File.separator + fileName, false);
@@ -74,9 +76,8 @@ public final class CustomConfig {
     }
 
     public void saveConfig() {
-        if (fileConfiguration == null || configFile == null) {
-            return;
-        }
+        if (fileConfiguration == null || configFile == null) return;
+
         try {
             getConfig().save(configFile);
         } catch (IOException e) {
@@ -84,26 +85,26 @@ public final class CustomConfig {
         }
     }
 
-    public void reloadLanguage() {
-        String lang = plugin.getConfig().getString("main-settings.lang");
+    public void reloadLanguage(String pathToLang) {
+        String lang = plugin.getConfig().getString(pathToLang);
 
         if (!lang.equalsIgnoreCase(fileName.replace(".yml", ""))) {
-            String langFile = plugin.getConfig().getString("main-settings.lang") + ".yml";
+            String langFile = lang + ".yml";
             plugin.messageConfig = new CustomConfig(plugin, "messages", langFile.toLowerCase());
-            plugin.getMessageConfig().reloadConfig();
+            plugin.messageConfig.reloadConfig();
         }
     }
 
-    public static void saveLanguages() {
+    public static void saveLanguages(Main plugin, String pathToLang) {
         // Получить URL папки messages внутри JAR
         URL url = CustomConfig.class.getResource("/messages");
         if (url != null) {
             try {
                 // Создать подключение к этому URL
                 URLConnection connection = url.openConnection();
-                if (connection instanceof JarURLConnection) {
+                if (connection instanceof JarURLConnection jarConnection) {
                     // Получить JAR файл
-                    JarFile jar = ((JarURLConnection) connection).getJarFile();
+                    JarFile jar = (jarConnection).getJarFile();
 
                     // Получить все элементы JAR файла
                     Enumeration<JarEntry> entries = jar.entries();
@@ -112,8 +113,8 @@ public final class CustomConfig {
                         // Если элемент - файл в папке messages, то сохранить его
                         if (entry.getName().startsWith("messages/") && entry.getName().endsWith(".yml")) {
                             String fileName = entry.getName().substring("messages/".length());
-                            Main.getInstance().messageConfig = new CustomConfig(Main.getInstance(), "messages", fileName);
-                            Main.getInstance().messageConfig.saveDefaultConfig();
+                            plugin.messageConfig = new CustomConfig(plugin, "messages", fileName);
+                            plugin.messageConfig.saveDefaultConfig();
                         }
                     }
                 }
@@ -121,8 +122,8 @@ public final class CustomConfig {
                 e.printStackTrace();
             }
         }
-        String langFile = Main.getInstance().getConfig().getString("main-settings.lang") + ".yml";
-        Main.getInstance().messageConfig = new CustomConfig(Main.getInstance(), "messages", langFile.toLowerCase());
+        String langFile = plugin.getConfig().getString(pathToLang) + ".yml";
+        plugin.messageConfig = new CustomConfig(plugin, "messages", langFile.toLowerCase());
     }
 
     @SuppressWarnings("all")

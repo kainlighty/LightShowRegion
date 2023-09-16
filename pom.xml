@@ -4,12 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+	<name>LightShowRegion</name>
+
     <groupId>ru.kainlight.lightshowregion</groupId>
     <artifactId>LightShowRegion</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.6.1</version>
     <packaging>jar</packaging>
-
-    <name>LightShowRegion</name>
+	
+	<developers>
+        <developer>
+            <id>kainlight</id>
+            <name>Danil Panov</name>
+            <url>vk.com/kainlight</url>
+        </developer>
+    </developers>
 
     <properties>
         <java.version>16</java.version>
@@ -90,13 +98,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
             <version>4.14.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

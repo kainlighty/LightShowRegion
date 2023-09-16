@@ -1,4 +1,4 @@
-package ru.kainlight.lightshowregion.UTILS;
+package ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -6,19 +6,21 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
-import ru.kainlight.lightshowregion.Main;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("unused")
 public final class Parser {
 
     private static final Parser parser = new Parser();
-    public static Parser get() { return parser; }
+    public static Parser get() {
+        return parser;
+    }
 
     private final Pattern pattern = Pattern.compile("#?&?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
 
-    public Component hex(@NotNull String message) {
+    public Component hex(String message) {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = pattern.matcher(message);
         while (matcher.find()) {
@@ -29,16 +31,28 @@ public final class Parser {
                     String replacement = TextColor.color(color).toString();
                     matcher.appendReplacement(buffer, replacement);
                 }
-            } catch (IllegalArgumentException ignored) {
-            }
+            } catch (IllegalArgumentException ignored) {}
         }
         matcher.appendTail(buffer);
         TextComponent result = LegacyComponentSerializer.legacy('&').deserialize(buffer.toString());
         return result;
     }
 
-    public String hexString(@NotNull String message) {
-        return LegacyComponentSerializer.legacySection().serialize(hex(message));
+    public Component hex(Component message) {
+        String serializedMessage = LegacyComponentSerializer.legacySection().serialize(message);
+        return hex(serializedMessage);
+    }
+
+    public String hexString(Component message) {
+        if(message == null) return "";
+
+        String serializedMessage = LegacyComponentSerializer.legacySection().serialize(message);
+        return hexString(serializedMessage);
+    }
+
+    public String hexString(String message) {
+        Component serializedMessage = hex(message);
+        return LegacyComponentSerializer.legacySection().serialize(serializedMessage);
     }
 
     public String replacedString(@NotNull Component text, String replaceOn, String replaceable) {
@@ -55,10 +69,4 @@ public final class Parser {
                 .replacement(replaceable)
                 .build());
     }
-
-    public Parser logger(@NotNull String message) {
-        Main.getInstance().getServer().getConsoleSender().sendMessage(hex(message));
-        return this;
-    }
-
 }
