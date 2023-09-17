@@ -2,6 +2,7 @@ package ru.kainlight.lightshowregion;
 
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -22,6 +23,7 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static Main instance;
+    private BukkitAudiences audience;
 
     public CustomConfig messageConfig;
     private CustomConfig regionsConfig;
@@ -38,6 +40,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        audience = BukkitAudiences.create(this);
 
         actionbarManager = new ActionbarManager(this);
         regionManager = new RegionManager(this);
@@ -47,7 +50,7 @@ public final class Main extends JavaPlugin {
 
         new CustomRegion(this).register();
 
-        Initiators.startPluginMessage(getDescription());
+        Initiators.startPluginMessage(this);
     }
 
     @Override
@@ -58,8 +61,6 @@ public final class Main extends JavaPlugin {
         Collection<BukkitTask> taskListValues = taskList.values();
         taskListValues.forEach(BukkitTask::cancel);
         taskList.clear();
-
-        Initiators.stopPluginMessage(getDescription().getName());
     }
 
     private void unregisterPlaceholders() {

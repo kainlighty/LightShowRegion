@@ -8,7 +8,7 @@
 
     <groupId>ru.kainlight.lightshowregion</groupId>
     <artifactId>LightShowRegion</artifactId>
-    <version>1.2.6.1</version>
+    <version>1.2.6.2</version>
     <packaging>jar</packaging>
 	
 	<developers>
@@ -98,13 +98,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
             <version>4.14.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
