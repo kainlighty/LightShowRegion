@@ -57,7 +57,7 @@ public final class ActionbarManager {
 
 
             String regionName = plugin.getRegionManager().sendRegionName(player);
-            Messenger.get().sendActionbar(player, regionName);
+            plugin.getMessenger().sendActionbar(player, regionName);
         }, 20L, 20L));
     }
 

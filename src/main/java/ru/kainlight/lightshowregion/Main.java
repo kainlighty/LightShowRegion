@@ -2,13 +2,13 @@ package ru.kainlight.lightshowregion;
 
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.CustomConfig;
-import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Messenger;
+import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
 import ru.kainlight.lightshowregion.COMMANDS.LightShowRegion;
 import ru.kainlight.lightshowregion.COMMON.ActionbarManager;
 import ru.kainlight.lightshowregion.COMMON.RegionManager;
@@ -23,7 +23,8 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private static Main instance;
-    private BukkitAudiences audience;
+
+    private Messenger messenger;
 
     public CustomConfig messageConfig;
     private CustomConfig regionsConfig;
@@ -40,7 +41,8 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        audience = BukkitAudiences.create(this);
+
+        messenger = new Messenger(this);
 
         actionbarManager = new ActionbarManager(this);
         regionManager = new RegionManager(this);

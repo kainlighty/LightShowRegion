@@ -27,15 +27,15 @@ public final class LightShowRegion implements CommandExecutor {
         if (args.length == 0) {
             if (!sender.hasPermission("lightshowregion.help")) return true;
 
-            Messenger.get().sendMessage(sender, " &f&m   &c&l LIGHTSHOWREGION HELP &f&m   ");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr toggle");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr remove <region>");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr global");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
-            Messenger.get().sendMessage(sender, "&c&l » &f/lsr reconfig (only console)");
+            plugin.getMessenger().sendMessage(sender, " &f&m   &c&l LIGHTSHOWREGION HELP &f&m   ");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr toggle");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr remove <region>");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr global");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
+            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reconfig (only console)");
             return true;
         }
 
@@ -46,10 +46,10 @@ public final class LightShowRegion implements CommandExecutor {
 
                 if(plugin.getActionbarManager().toggle(player)) {
                     String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.disabled");
-                    Messenger.get().sendMessage(player, toggleMessage);
+                    plugin.getMessenger().sendMessage(player, toggleMessage);
                 } else {
                     String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.enabled");
-                    Messenger.get().sendMessage(player, toggleMessage);
+                    plugin.getMessenger().sendMessage(player, toggleMessage);
                 }
 
                 return true;
@@ -58,7 +58,7 @@ public final class LightShowRegion implements CommandExecutor {
                 if (!sender.hasPermission("lightshowregion.reload.config") || !sender.hasPermission("lightshowregion.reload.bar")) return true;
 
                 if (args.length < 2) {
-                    Messenger.get().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
+                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("config")) {
@@ -67,7 +67,7 @@ public final class LightShowRegion implements CommandExecutor {
                     this.reloadConfigs();
 
                     String reloadConfigs = plugin.getMessageConfig().getConfig().getString("region.reload.config");
-                    Messenger.get().sendMessage(sender, reloadConfigs);
+                    plugin.getMessenger().sendMessage(sender, reloadConfigs);
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("bar")) {
@@ -75,7 +75,7 @@ public final class LightShowRegion implements CommandExecutor {
 
                     plugin.getServer().getOnlinePlayers().forEach(player -> plugin.getActionbarManager().show(player));
                     String reloadBar = plugin.getMessageConfig().getConfig().getString("region.reload.bar");
-                    Messenger.get().sendMessage(sender, reloadBar);
+                    plugin.getMessenger().sendMessage(sender, reloadBar);
                     return true;
                 }
             }
@@ -95,13 +95,13 @@ public final class LightShowRegion implements CommandExecutor {
                 plugin.saveConfig();
 
                 String global = plugin.getMessageConfig().getConfig().getString("region.global");
-                Messenger.get().sendMessage(sender, global);
+                plugin.getMessenger().sendMessage(sender, global);
             }
             case "add" -> {
                 if (!sender.hasPermission("lightshowregion.add")) return true;
 
                 if (args.length < 3) {
-                    Messenger.get().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
+                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
                     return true;
                 }
 
@@ -109,7 +109,7 @@ public final class LightShowRegion implements CommandExecutor {
                 boolean isRegionExists = plugin.getRegionsConfig().getConfig().contains("custom." + region);
                 if (isRegionExists) {
                     String regionExists = plugin.getMessageConfig().getConfig().getString("region.exists").replace("<region>", region);
-                    Messenger.get().sendMessage(sender, regionExists);
+                    plugin.getMessenger().sendMessage(sender, regionExists);
                     return true;
                 }
 
@@ -126,13 +126,13 @@ public final class LightShowRegion implements CommandExecutor {
                 String regionAdded = plugin.getMessageConfig().getConfig().getString("region.added")
                         .replace("<region>", region)
                         .replace("<name>", rgcustomnamehex);
-                Messenger.get().sendMessage(sender, regionAdded);
+                plugin.getMessenger().sendMessage(sender, regionAdded);
             }
             case "remove" -> {
                 if (!sender.hasPermission("lightshowregion.remove")) return true;
 
                 if (args.length < 2) {
-                    Messenger.get().sendMessage(sender, "&c&l » &f/lsr remove <region>");
+                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr remove <region>");
                     return true;
                 }
 
@@ -140,7 +140,7 @@ public final class LightShowRegion implements CommandExecutor {
                 boolean isRegionExists = plugin.getRegionsConfig().getConfig().contains("custom." + region);
                 if (!isRegionExists) {
                     String regionNotFound = plugin.getMessageConfig().getConfig().getString("region.notFound").replace("<region>", region);
-                    Messenger.get().sendMessage(sender, regionNotFound);
+                    plugin.getMessenger().sendMessage(sender, regionNotFound);
                     return true;
                 }
 
@@ -149,7 +149,7 @@ public final class LightShowRegion implements CommandExecutor {
                 plugin.getRegionsConfig().getConfig().set(path, null);
                 plugin.getRegionsConfig().saveConfig();
                 String regionRemoved = plugin.getMessageConfig().getConfig().getString("region.removed").replace("<region>", region);
-                Messenger.get().sendMessage(sender, regionRemoved);
+                plugin.getMessenger().sendMessage(sender, regionRemoved);
             }
             case "blacklist" -> {
                 List<String> blacklisted = plugin.getConfig().getStringList("region-settings.blacklist");
@@ -157,38 +157,38 @@ public final class LightShowRegion implements CommandExecutor {
                     if (!sender.hasPermission("lightshowregion.blacklist.add")) return true;
 
                     if (args.length < 3) {
-                        Messenger.get().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
+                        plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
                         return true;
                     }
 
                     String region = args[2];
                     if (blacklisted.contains(region)) {
                         String message = plugin.getMessageConfig().getConfig().getString("region.exists").replace("<region>", region);
-                        Messenger.get().sendMessage(sender, message);
+                        plugin.getMessenger().sendMessage(sender, message);
                         return true;
                     }
 
                     String message = blacklistManage(blacklisted, region, "added");
-                    Messenger.get().sendMessage(sender, message);
+                    plugin.getMessenger().sendMessage(sender, message);
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("remove")) {
                     if (!sender.hasPermission("lightshowregion.blacklist.remove")) return true;
 
                     if (args.length < 3) {
-                        Messenger.get().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
+                        plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
                         return true;
                     }
 
                     String region = args[2];
                     if (!blacklisted.contains(region)) {
                         String blacklistNotFound = plugin.getMessageConfig().getConfig().getString("region.notFound").replace("<region>", region);
-                        Messenger.get().sendMessage(sender, blacklistNotFound);
+                        plugin.getMessenger().sendMessage(sender, blacklistNotFound);
                         return true;
                     }
 
                     String message = blacklistManage(blacklisted, region, "removed");
-                    Messenger.get().sendMessage(sender, message);
+                    plugin.getMessenger().sendMessage(sender, message);
                     return true;
                 }
             }
