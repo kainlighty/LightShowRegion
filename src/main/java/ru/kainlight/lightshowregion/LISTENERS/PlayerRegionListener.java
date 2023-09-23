@@ -38,24 +38,4 @@ public final class PlayerRegionListener implements Listener {
         }
     }
 
-/*    @EventHandler
-    public static void regionBypass(PlayerMoveEvent event) {
-        WG GetWG = new WG();
-        Player player = event.getPlayer();
-        Location loc = BukkitAdapter.adapt(player.getLocation());
-        ApplicableRegionSet set = GetWG.getQuery().getApplicableRegions(loc);
-        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-
-        List<String> accessRegions = customConfigsManager.getPlayerAccessRegionsListConfig("accesses." + player.getName());
-
-        for (ProtectedRegion region : set) {
-            if (accessRegions.contains(region.getId())) {
-                region.getOwners().addPlayer(localPlayer);
-                return;
-            } else {
-                region.getOwners().removePlayer(localPlayer);
-            }
-        }
-    }*/
-
 }

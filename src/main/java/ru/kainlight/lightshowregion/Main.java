@@ -5,13 +5,12 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.CustomConfig;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Messenger;
-import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
 import ru.kainlight.lightshowregion.COMMANDS.LightShowRegion;
 import ru.kainlight.lightshowregion.COMMON.ActionbarManager;
 import ru.kainlight.lightshowregion.COMMON.RegionManager;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.BukkitConfig;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
+import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
 import ru.kainlight.lightshowregion.LISTENERS.PlayerRegionListener;
 
 import java.util.Collection;
@@ -24,25 +23,21 @@ public final class Main extends JavaPlugin {
     @Getter
     private static Main instance;
 
-    private Messenger messenger;
-
-    public CustomConfig messageConfig;
-    private CustomConfig regionsConfig;
+    public BukkitConfig messageConfig;
+    private BukkitConfig regionsConfig;
     private ActionbarManager actionbarManager;
     private RegionManager regionManager;
 
     @Override
     public void onLoad() {
         saveDefaultConfig();
-        CustomConfig.saveLanguages(this, "main-settings.lang");
-        regionsConfig = new CustomConfig(this, "regions.yml");
+        BukkitConfig.saveLanguages(this, "main-settings.lang");
+        regionsConfig = new BukkitConfig(this, "regions.yml");
     }
 
     @Override
     public void onEnable() {
         instance = this;
-
-        messenger = new Messenger(this);
 
         actionbarManager = new ActionbarManager(this);
         regionManager = new RegionManager(this);

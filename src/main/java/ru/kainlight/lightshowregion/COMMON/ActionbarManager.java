@@ -3,7 +3,7 @@ package ru.kainlight.lightshowregion.COMMON;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Messenger;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlayer;
 import ru.kainlight.lightshowregion.Main;
 
 import java.util.HashMap;
@@ -55,9 +55,8 @@ public final class ActionbarManager {
             String playerWorldName = player.getWorld().getName();
             if (global.equals("") || disabledWorlds.contains(playerWorldName)) return;
 
-
             String regionName = plugin.getRegionManager().sendRegionName(player);
-            plugin.getMessenger().sendActionbar(player, regionName);
+            LightPlayer.of(player).sendActionbar(regionName);
         }, 20L, 20L));
     }
 

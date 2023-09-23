@@ -7,9 +7,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightLib;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Messenger;
-import ru.kainlight.lightshowregion.Main;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlayer;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Parser;
+import ru.kainlight.lightshowregion.Main;
 
 import java.util.*;
 
@@ -26,16 +26,17 @@ public final class LightShowRegion implements CommandExecutor {
 
         if (args.length == 0) {
             if (!sender.hasPermission("lightshowregion.help")) return true;
-
-            plugin.getMessenger().sendMessage(sender, " &f&m   &c&l LIGHTSHOWREGION HELP &f&m   ");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr toggle");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr remove <region>");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr global");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
-            plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reconfig (only console)");
+            sender.sendMessage("");
+            LightPlayer.of(sender).sendMessage(" &f&m   &c&l LIGHTSHOWREGION HELP &f&m   ");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr toggle");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr add <region> <name>");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr remove <region>");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr blacklist add <region>");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr blacklist remove <region>");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr global");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr reload <config|bar>");
+            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr reconfig (only console)");
+            sender.sendMessage("");
             return true;
         }
 
@@ -46,10 +47,10 @@ public final class LightShowRegion implements CommandExecutor {
 
                 if(plugin.getActionbarManager().toggle(player)) {
                     String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.disabled");
-                    plugin.getMessenger().sendMessage(player, toggleMessage);
+                    LightPlayer.of(player).sendMessage(toggleMessage);
                 } else {
                     String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.enabled");
-                    plugin.getMessenger().sendMessage(player, toggleMessage);
+                    LightPlayer.of(player).sendMessage(toggleMessage);
                 }
 
                 return true;
@@ -58,7 +59,7 @@ public final class LightShowRegion implements CommandExecutor {
                 if (!sender.hasPermission("lightshowregion.reload.config") || !sender.hasPermission("lightshowregion.reload.bar")) return true;
 
                 if (args.length < 2) {
-                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr reload <config|bar>");
+                    LightPlayer.of(sender).sendMessage("&c&l » &f/lsr reload <config|bar>");
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("config")) {
@@ -67,7 +68,7 @@ public final class LightShowRegion implements CommandExecutor {
                     this.reloadConfigs();
 
                     String reloadConfigs = plugin.getMessageConfig().getConfig().getString("region.reload.config");
-                    plugin.getMessenger().sendMessage(sender, reloadConfigs);
+                    LightPlayer.of(sender).sendMessage( reloadConfigs);
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("bar")) {
@@ -75,14 +76,14 @@ public final class LightShowRegion implements CommandExecutor {
 
                     plugin.getServer().getOnlinePlayers().forEach(player -> plugin.getActionbarManager().show(player));
                     String reloadBar = plugin.getMessageConfig().getConfig().getString("region.reload.bar");
-                    plugin.getMessenger().sendMessage(sender, reloadBar);
+                    LightPlayer.of(sender).sendMessage(reloadBar);
                     return true;
                 }
             }
             case "reconfig" -> {
                 if (sender instanceof Player) return true;
 
-                LightLib.updateConfig(plugin);
+                LightLib.get().updateConfig(plugin);
                 plugin.getMessageConfig().updateConfig();
                 plugin.getLogger().warning("All configurations has been updated");
                 return true;
@@ -95,13 +96,13 @@ public final class LightShowRegion implements CommandExecutor {
                 plugin.saveConfig();
 
                 String global = plugin.getMessageConfig().getConfig().getString("region.global");
-                plugin.getMessenger().sendMessage(sender, global);
+                LightPlayer.of(sender).sendMessage(global);
             }
             case "add" -> {
                 if (!sender.hasPermission("lightshowregion.add")) return true;
 
                 if (args.length < 3) {
-                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr add <region> <name>");
+                    LightPlayer.of(sender).sendMessage("&c&l » &f/lsr add <region> <name>");
                     return true;
                 }
 
@@ -109,7 +110,7 @@ public final class LightShowRegion implements CommandExecutor {
                 boolean isRegionExists = plugin.getRegionsConfig().getConfig().contains("custom." + region);
                 if (isRegionExists) {
                     String regionExists = plugin.getMessageConfig().getConfig().getString("region.exists").replace("<region>", region);
-                    plugin.getMessenger().sendMessage(sender, regionExists);
+                    LightPlayer.of(sender).sendMessage(regionExists);
                     return true;
                 }
 
@@ -126,13 +127,13 @@ public final class LightShowRegion implements CommandExecutor {
                 String regionAdded = plugin.getMessageConfig().getConfig().getString("region.added")
                         .replace("<region>", region)
                         .replace("<name>", rgcustomnamehex);
-                plugin.getMessenger().sendMessage(sender, regionAdded);
+                LightPlayer.of(sender).sendMessage(regionAdded);
             }
             case "remove" -> {
                 if (!sender.hasPermission("lightshowregion.remove")) return true;
 
                 if (args.length < 2) {
-                    plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr remove <region>");
+                    LightPlayer.of(sender).sendMessage("&c&l » &f/lsr remove <region>");
                     return true;
                 }
 
@@ -140,7 +141,7 @@ public final class LightShowRegion implements CommandExecutor {
                 boolean isRegionExists = plugin.getRegionsConfig().getConfig().contains("custom." + region);
                 if (!isRegionExists) {
                     String regionNotFound = plugin.getMessageConfig().getConfig().getString("region.notFound").replace("<region>", region);
-                    plugin.getMessenger().sendMessage(sender, regionNotFound);
+                    LightPlayer.of(sender).sendMessage(regionNotFound);
                     return true;
                 }
 
@@ -149,7 +150,7 @@ public final class LightShowRegion implements CommandExecutor {
                 plugin.getRegionsConfig().getConfig().set(path, null);
                 plugin.getRegionsConfig().saveConfig();
                 String regionRemoved = plugin.getMessageConfig().getConfig().getString("region.removed").replace("<region>", region);
-                plugin.getMessenger().sendMessage(sender, regionRemoved);
+                LightPlayer.of(sender).sendMessage(regionRemoved);
             }
             case "blacklist" -> {
                 List<String> blacklisted = plugin.getConfig().getStringList("region-settings.blacklist");
@@ -157,38 +158,38 @@ public final class LightShowRegion implements CommandExecutor {
                     if (!sender.hasPermission("lightshowregion.blacklist.add")) return true;
 
                     if (args.length < 3) {
-                        plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist add <region>");
+                        LightPlayer.of(sender).sendMessage("&c&l » &f/lsr blacklist add <region>");
                         return true;
                     }
 
                     String region = args[2];
                     if (blacklisted.contains(region)) {
                         String message = plugin.getMessageConfig().getConfig().getString("region.exists").replace("<region>", region);
-                        plugin.getMessenger().sendMessage(sender, message);
+                        LightPlayer.of(sender).sendMessage(message);
                         return true;
                     }
 
                     String message = blacklistManage(blacklisted, region, "added");
-                    plugin.getMessenger().sendMessage(sender, message);
+                    LightPlayer.of(sender).sendMessage(message);
                     return true;
                 }
                 if (args[1].equalsIgnoreCase("remove")) {
                     if (!sender.hasPermission("lightshowregion.blacklist.remove")) return true;
 
                     if (args.length < 3) {
-                        plugin.getMessenger().sendMessage(sender, "&c&l » &f/lsr blacklist remove <region>");
+                        LightPlayer.of(sender).sendMessage( "&c&l » &f/lsr blacklist remove <region>");
                         return true;
                     }
 
                     String region = args[2];
                     if (!blacklisted.contains(region)) {
                         String blacklistNotFound = plugin.getMessageConfig().getConfig().getString("region.notFound").replace("<region>", region);
-                        plugin.getMessenger().sendMessage(sender, blacklistNotFound);
+                        LightPlayer.of(sender).sendMessage(blacklistNotFound);
                         return true;
                     }
 
                     String message = blacklistManage(blacklisted, region, "removed");
-                    plugin.getMessenger().sendMessage(sender, message);
+                    LightPlayer.of(sender).sendMessage(message);
                     return true;
                 }
             }
