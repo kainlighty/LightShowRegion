@@ -1,3 +1,4 @@
+config-version: 1.0
 region:
   toggle:
     enabled: "&aDisplay region successfully enabled"

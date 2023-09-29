@@ -3,12 +3,12 @@ package ru.kainlight.lightshowregion;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import ru.kainlight.lightshowregion.COMMANDS.LightShowRegion;
 import ru.kainlight.lightshowregion.COMMON.ActionbarManager;
 import ru.kainlight.lightshowregion.COMMON.RegionManager;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.BukkitConfig;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlugin;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
 import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
 import ru.kainlight.lightshowregion.LISTENERS.PlayerRegionListener;
@@ -18,21 +18,19 @@ import java.util.Map;
 
 @Getter
 @SuppressWarnings("all")
-public final class Main extends JavaPlugin {
+public final class Main extends LightPlugin {
 
     @Getter
     private static Main instance;
 
-    public BukkitConfig messageConfig;
     private BukkitConfig regionsConfig;
     private ActionbarManager actionbarManager;
     private RegionManager regionManager;
 
     @Override
     public void onLoad() {
-        saveDefaultConfig();
-        BukkitConfig.saveLanguages(this, "main-settings.lang");
         regionsConfig = new BukkitConfig(this, "regions.yml");
+        regionsConfig.updateConfig();
     }
 
     @Override

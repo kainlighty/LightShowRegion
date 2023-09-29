@@ -2,6 +2,8 @@ package ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightLib;
+import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlugin;
 import ru.kainlight.lightshowregion.Main;
 
 import java.io.File;
@@ -17,17 +19,18 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public final class BukkitConfig {
-    private final Main plugin;
+    private final LightPlugin plugin;
+    private final double CONFIG_VERSION = 1.0;
     private final String fileName;
     private final String subdirectory;
     private File configFile;
     private FileConfiguration fileConfiguration;
 
-    public BukkitConfig(Main plugin, String fileName) {
+    public BukkitConfig(LightPlugin plugin, String fileName) {
         this(plugin, null, fileName);
     }
 
-    public BukkitConfig(Main plugin, String subdirectory, String fileName) {
+    public BukkitConfig(LightPlugin plugin, String subdirectory, String fileName) {
         this.plugin = plugin;
         this.subdirectory = subdirectory;
         this.fileName = fileName;
@@ -85,17 +88,17 @@ public final class BukkitConfig {
         }
     }
 
-    void reloadLanguage(String pathToLang) { // Доделать
+    public void reloadLanguage(String pathToLang) {
         String lang = plugin.getConfig().getString(pathToLang);
-
-        if (!lang.equalsIgnoreCase(fileName.replace(".yml", ""))) {
+        String fileName = this.fileName.replace(".yml", "");
+        if (!lang.equalsIgnoreCase(fileName)) {
             String langFile = lang + ".yml";
             plugin.messageConfig = new BukkitConfig(plugin, "messages", langFile.toLowerCase());
-            plugin.messageConfig.reloadConfig();
         }
+        this.reloadConfig();
     }
 
-    public static void saveLanguages(Main plugin, String pathToLang) {
+    public static void saveLanguages(LightPlugin plugin, String pathToLang) {
         // Получить URL папки messages внутри JAR
         URL url = BukkitConfig.class.getResource("/messages");
         if (url != null) {
@@ -110,11 +113,11 @@ public final class BukkitConfig {
                     Enumeration<JarEntry> entries = jar.entries();
                     while (entries.hasMoreElements()) {
                         JarEntry entry = entries.nextElement();
+                        String name = entry.getName();
                         // Если элемент - файл в папке messages, то сохранить его
-                        if (entry.getName().startsWith("messages/") && entry.getName().endsWith(".yml")) {
-                            String fileName = entry.getName().substring("messages/".length());
+                        if (name.startsWith("messages/") && name.endsWith(".yml")) {
+                            String fileName = name.substring("messages/".length());
                             plugin.messageConfig = new BukkitConfig(plugin, "messages", fileName);
-                            plugin.messageConfig.saveDefaultConfig();
                         }
                     }
                 }
@@ -124,12 +127,16 @@ public final class BukkitConfig {
         }
         String langFile = plugin.getConfig().getString(pathToLang) + ".yml";
         plugin.messageConfig = new BukkitConfig(plugin, "messages", langFile.toLowerCase());
+        plugin.messageConfig.reloadConfig();
     }
 
     @SuppressWarnings("all")
     public void updateConfig() {
         // Загрузка текущей конфигурации
         FileConfiguration userConfig = this.getConfig();
+        // Загрузка текущей конфигурации
+        double version = userConfig.getDouble("config-version");
+        if(version == CONFIG_VERSION) return;
 
         InputStream defaultConfigStream;
         // Чтение конфигурации по умолчанию из JAR-файла
@@ -154,6 +161,9 @@ public final class BukkitConfig {
                 userConfig.set(key, null);
             }
         });
+
+        plugin.getLogger().warning(fileName + " updated");
+        getConfig().set("config-version", CONFIG_VERSION);
         saveConfig();
     }
 

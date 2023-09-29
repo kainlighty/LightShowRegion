@@ -80,14 +80,6 @@ public final class LightShowRegion implements CommandExecutor {
                     return true;
                 }
             }
-            case "reconfig" -> {
-                if (sender instanceof Player) return true;
-
-                LightLib.get().updateConfig(plugin);
-                plugin.getMessageConfig().updateConfig();
-                plugin.getLogger().warning("All configurations has been updated");
-                return true;
-            }
             case "global" -> {
                 if (!sender.hasPermission("lightshowregion.global")) return true;
 
