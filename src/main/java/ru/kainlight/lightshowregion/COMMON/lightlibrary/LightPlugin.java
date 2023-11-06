@@ -1,9 +1,15 @@
 package ru.kainlight.lightshowregion.COMMON.lightlibrary;
 
 import lombok.Getter;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.BukkitConfig;
 
 import java.io.InputStream;
@@ -17,12 +23,24 @@ public class LightPlugin extends JavaPlugin {
     private final boolean paper = isPaperPlugin();
     public BukkitConfig messageConfig;
 
-    @Override
-    public void onLoad() {
-        this.saveDefaultConfig();
-        BukkitConfig.saveLanguages(this, "language");
-        updateConfig();
-        messageConfig.updateConfig();
+
+	
+	public LightPlugin registerListener(@NotNull Listener listener) {
+        this.getServer().getPluginManager().registerEvents(listener, this);
+        return this;
+    }
+
+    public LightPlugin registerCommand(@NotNull String command, @NotNull CommandExecutor executor, @Nullable TabCompleter tabCompleter) {
+        PluginCommand pluginCommand = this.getCommand(command);
+        pluginCommand.setExecutor(executor);
+        if(tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
+        return this;
+    }
+
+    public LightPlugin registerCommand(@NotNull String command, @NotNull CommandExecutor executor) {
+        PluginCommand pluginCommand = this.getCommand(command);
+        pluginCommand.setExecutor(executor);
+        return this;
     }
 
     @SuppressWarnings("all")

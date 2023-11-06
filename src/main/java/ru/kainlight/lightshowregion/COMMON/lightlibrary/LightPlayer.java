@@ -23,26 +23,35 @@ public final class LightPlayer {
 
     @Getter
     private static final BukkitAudiences audience = BukkitAudiences.create(Main.getInstance());
+
     private final Audience sender;
 
     private LightPlayer(CommandSender sender) {
         this.sender = audience.sender(sender);
     }
 
+    private LightPlayer(Player player) {
+        this.sender = audience.player(player);
+    }
+
     public static LightPlayer of(CommandSender sender) {
         return new LightPlayer(sender);
+    }
+
+    public static LightPlayer of(Player player) {
+        return new LightPlayer(player);
     }
 
     public void sendClickableHoverMessage(String message, String hover, String command) {
         if (message == null) return;
 
-        Component mainComponent = Parser.get().hex(message);
-        Component hoverComponent = Parser.get().hex(hover);
-        Component component = mainComponent
+        Component component = Parser.get().hex(message);
+        Component component2 = Parser.get().hex(hover);
+        Component hoverComponent = component
                 .clickEvent(ClickEvent.runCommand(command))
-                .hoverEvent(HoverEvent.showText(hoverComponent));
+                .hoverEvent(HoverEvent.showText(component2));
 
-        sender.sendMessage(component);
+        sender.sendMessage(hoverComponent);
     }
 
     public void sendClickableMessage(String message, String command) {
@@ -50,6 +59,19 @@ public final class LightPlayer {
         Component component = Parser.get().hex(message);
         component = component.clickEvent(ClickEvent.runCommand(command));
 
+        sender.sendMessage(component);
+    }
+
+    public void sendMessage(Component component) {
+        if (component == null) return;
+
+        sender.sendMessage(component);
+    }
+
+    public void sendMessage2(String message) {
+        if (message == null) return;
+
+        Component component = Parser.get().hex(message);
         sender.sendMessage(component);
     }
 
@@ -74,10 +96,10 @@ public final class LightPlayer {
     public void sendHoverMessage(String message, String hover) {
         if (message == null) return;
 
-        Component hoverComponent = Parser.get().hex(hover);
-        Component component = Parser.get().hex(message).hoverEvent(HoverEvent.showText(hoverComponent));
+        Component component = Parser.get().hex(message);
+        Component hoverComponent = component.hoverEvent(HoverEvent.showText(component));
 
-        sender.sendMessage(component);
+        sender.sendMessage(hoverComponent);
     }
 
     @SuppressWarnings("all")
@@ -91,9 +113,13 @@ public final class LightPlayer {
         sender.showTitle(titleToSend);
     }
 
-    public void sendTitle(Component title, Component subTitle) {
-        Title resultTitle = Title.title(title, subTitle);
-        sender.showTitle(resultTitle);
+    public void sendTitle(String title, String subtitle) {
+        Component titleComponent = Parser.get().hex(title);
+        Component subtitleComponent = Parser.get().hex(subtitle);
+
+        Title titleToSend = Title.title(titleComponent, subtitleComponent);
+
+        sender.showTitle(titleToSend);
     }
 
     public void clearTitle() {
@@ -127,10 +153,7 @@ public final class LightPlayer {
     public static void sendMessageForAll(List<String> messages) {
         if (messages == null || messages.isEmpty()) return;
 
-        messages.forEach(message -> {
-            Component component = Parser.get().hex(message);
-            sendMessageForAll(message);
-        });
+        messages.forEach(LightPlayer::sendMessageForAll);
     }
 
     public static void sendMessageForAll(String... message) {

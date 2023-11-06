@@ -8,34 +8,31 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import ru.kainlight.lightshowregion.Main;
 
-public final class PlayerRegionListener implements Listener {
+public final class PlayerListener implements Listener {
 
     private final Main plugin;
 
-    public PlayerRegionListener(Main plugin) {
+    public PlayerListener(Main plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        plugin.getActionbarManager().toggle(player);
+
+        // LightPlayer.getAudience().player(player).sendActionBar(Component.text("hi"));
+
+        plugin.getActionbarManager().show(player);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        if (plugin.getActionbarManager().getActionbarTask().containsKey(player)) {
-            plugin.getActionbarManager().hide(player);
-        }
+        plugin.getActionbarManager().hide(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
-        Player player = event.getPlayer();
-        if (plugin.getActionbarManager().getActionbarTask().containsKey(player)) {
-            plugin.getActionbarManager().hide(player);
-        }
+        plugin.getActionbarManager().hide(event.getPlayer());
     }
 
 }

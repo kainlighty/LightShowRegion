@@ -42,7 +42,7 @@ public final class RegionManager {
                         : regionBarMessage.replace("<region>", regionCustomName);
             }
 
-            return compareRegionPlayers(player);
+            return compareRegionPlayers(player, region);
         }
 
         return names.isEmpty() && !hideGlobalRegion
@@ -52,17 +52,17 @@ public final class RegionManager {
 
 
 
-    private String compareRegionPlayers(Player player) {
+    private String compareRegionPlayers(Player player, String regionName) {
         String notYour = plugin.getMessageConfig().getConfig().getString("actionbar.not-your");
         String your = plugin.getMessageConfig().getConfig().getString("actionbar.your");
 
-        String regionOwners = getRegionOwners(player);
+        String regionOwner = getRegionOwner(player);
         String regionMembers = getRegionMembers(player);
 
-        if(regionOwners.contains(player.getName()) || regionMembers.contains(player.getName())) {
-            return your;
+        if(regionOwner.contains(player.getName()) || regionMembers.contains(player.getName())) {
+            return your.replace("<name>", regionName).replace("<owner>", regionOwner);
         } else {
-            return notYour;
+            return notYour.replace("<name>", regionName).replace("<owner>", regionOwner);
         }
     }
 
@@ -83,7 +83,7 @@ public final class RegionManager {
         return PlaceholderAPI.setPlaceholders(player, "%worldguard_region_name%");
     }
 
-    private String getRegionOwners(Player player) {
+    private String getRegionOwner(Player player) {
         return PlaceholderAPI.setPlaceholders(player, "%worldguard_region_owner%");
     }
 

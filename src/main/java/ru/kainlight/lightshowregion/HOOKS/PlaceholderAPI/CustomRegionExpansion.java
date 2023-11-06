@@ -6,11 +6,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.kainlight.lightshowregion.Main;
 
-public final class CustomRegion extends PlaceholderExpansion {
+public final class CustomRegionExpansion extends PlaceholderExpansion {
 
     private final Main plugin;
 
-    public CustomRegion(Main plugin) {
+    public CustomRegionExpansion(Main plugin) {
         this.plugin = plugin;
     }
 

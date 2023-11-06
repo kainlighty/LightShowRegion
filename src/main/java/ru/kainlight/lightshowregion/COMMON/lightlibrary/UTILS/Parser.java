@@ -20,48 +20,30 @@ public final class Parser {
         return parser;
     }
 
-    private final Pattern pattern = Pattern.compile("#?&?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
+    private static final Pattern hexPatten = Pattern.compile("#[0-9A-Fa-f]{6}");
 
-    public Component hex(String message) {
-        if(message.equals("")) return Component.text("");
+    private static final LegacyComponentSerializer legacyAmpersand = LegacyComponentSerializer.legacyAmpersand();
+    private static final LegacyComponentSerializer legacySection = LegacyComponentSerializer.legacySection();
 
-        StringBuffer buffer = new StringBuffer();
-        Matcher matcher = pattern.matcher(message);
+    public TextComponent hex(String input) {
+        Matcher matcher = hexPatten.matcher(input);
+
         while (matcher.find()) {
-            String colorCode = matcher.group(1);
-            try {
-                TextColor color = TextColor.fromHexString(colorCode);
-                if (color != null) {
-                    String replacement = TextColor.color(color).toString();
-                    matcher.appendReplacement(buffer, replacement);
-                }
-            } catch (IllegalArgumentException ignored) {}
+            String hexColor = matcher.group();
+            if (!hexColor.startsWith("&#")) {
+                input = input.replace(hexColor, "&" + hexColor);
+            }
         }
-        matcher.appendTail(buffer);
-        TextComponent result = LegacyComponentSerializer.legacy('&').deserialize(buffer.toString());
-        return result;
+
+        return legacyAmpersand.deserialize(input);
     }
 
-    public Component hex(Component message) {
-        String serializedMessage = LegacyComponentSerializer.legacySection().serialize(message);
-        return hex(serializedMessage);
+    public String hexString(String input) {
+        String serialize = LegacyComponentSerializer.legacySection().serialize(hex(input));
+        return serialize;
     }
 
-    public String hexString(String message) {
-        if(message == null) return "";
-
-        Component serializedMessage = hex(message);
-        return LegacyComponentSerializer.legacySection().serialize(serializedMessage);
-    }
-
-    public String hexString(Component message) {
-        if(message == null) return "";
-
-        String serializedMessage = LegacyComponentSerializer.legacySection().serialize(message);
-        return hexString(serializedMessage);
-    }
-
-    public List<String> hexString(List<String> messages) {
+    public List<String> hex(List<String> messages) {
         if(messages.isEmpty()) return List.of("");
         List<String> copyMessages = new ArrayList<>();
         messages.forEach(message -> {
@@ -77,7 +59,7 @@ public final class Parser {
                 .matchLiteral(replaceOn)
                 .replacement(replaceable)
                 .build());
-        return LegacyComponentSerializer.legacySection().serialize(component);
+        return legacySection.serialize(component);
     }
 
     public Component replacedComponent(@NotNull Component text, String replaceOn, String replaceable) {

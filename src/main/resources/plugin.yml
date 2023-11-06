@@ -2,7 +2,7 @@ name: LightShowRegion
 version: '${project.version}'
 main: ru.kainlight.lightshowregion.Main
 api-version: 1.16
-depend: [ PlaceholderAPI ]
+softdepend: [ PlaceholderAPI ]
 loadbefore: [ PlaceholderAPI ]
 authors: [ kainlight ]
 description: Show Region Name in Actionbar

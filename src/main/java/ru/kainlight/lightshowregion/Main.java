@@ -10,8 +10,8 @@ import ru.kainlight.lightshowregion.COMMON.RegionManager;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.BukkitConfig;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlugin;
 import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
-import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegion;
-import ru.kainlight.lightshowregion.LISTENERS.PlayerRegionListener;
+import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegionExpansion;
+import ru.kainlight.lightshowregion.LISTENERS.PlayerListener;
 
 import java.util.Collection;
 import java.util.Map;
@@ -29,21 +29,26 @@ public final class Main extends LightPlugin {
 
     @Override
     public void onLoad() {
-        regionsConfig = new BukkitConfig(this, "regions.yml");
-        regionsConfig.updateConfig();
+        this.saveDefaultConfig();
     }
 
     @Override
     public void onEnable() {
         instance = this;
 
+        BukkitConfig.saveLanguages(this, "main-settings.lang");
+        updateConfig();
+        messageConfig.updateConfig();
+        regionsConfig = new BukkitConfig(this, "regions.yml");
+        regionsConfig.updateConfig();
+
         actionbarManager = new ActionbarManager(this);
         regionManager = new RegionManager(this);
 
-        getCommand("lightshowregion").setExecutor(new LightShowRegion(this));
-        this.getServer().getPluginManager().registerEvents(new PlayerRegionListener(this),this);
+        registerCommand("lightshowregion", new LightShowRegion(this));
+        registerListener(new PlayerListener(this));
 
-        new CustomRegion(this).register();
+        registerPlaceholders();
 
         Initiators.startPluginMessage(this);
     }
@@ -52,15 +57,18 @@ public final class Main extends LightPlugin {
     public void onDisable() {
         unregisterPlaceholders();
 
-        Map<Player, BukkitTask> taskList = this.getActionbarManager().getActionbarTask();
-        Collection<BukkitTask> taskListValues = taskList.values();
-        taskListValues.forEach(BukkitTask::cancel);
-        taskList.clear();
+        this.getServer().getScheduler().cancelTasks(this);
+    }
+
+    private void registerPlaceholders() {
+        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
+            new CustomRegionExpansion(this).register();
+        }
     }
 
     private void unregisterPlaceholders() {
-        if(getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(getDescription().getName().toLowerCase())) {
-            new CustomRegion(this).unregister();
+        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
+            new CustomRegionExpansion(this).unregister();
         }
     }
 
