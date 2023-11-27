@@ -24,32 +24,32 @@ public final class RegionManager {
         String globalBarMessage = plugin.getMessageConfig().getConfig().getString("actionbar.global");
 
         String region = getRegion(player);
-        if(!region.equals("")) {
+        if (!region.equals("")) {
             String regionCustomName = getCustomRegionName(region);
+            if (regionCustomName != null && !regionCustomName.isEmpty()) {
 
-            List<String> blacklist = plugin.getConfig().getStringList("region-settings.blacklist");
-            String blacklistBarMessage = plugin.getMessageConfig().getConfig().getString("actionbar.blacklisted");
-            String regionBarMessage = plugin.getMessageConfig().getConfig().getString("actionbar.region");
+                List<String> blacklist = plugin.getConfig().getStringList("region-settings.blacklist");
+                String blacklistBarMessage = plugin.getMessageConfig().getConfig().getString("actionbar.blacklisted");
+                String regionBarMessage = plugin.getMessageConfig().getConfig().getString("actionbar.region");
 
-            if (blacklist.contains(region)) {
-                return blacklistBarMessage;
-            }
+                if (blacklist.contains(region)) {
+                    return blacklistBarMessage;
+                }
 
-            if (regionCustomName != null) {
                 names.add(regionCustomName);
                 return regionCustomName.startsWith("!")
                         ? regionCustomName.substring(1)
                         : regionBarMessage.replace("<region>", regionCustomName);
-            }
 
-            return compareRegionPlayers(player, region);
+            } else {
+                return compareRegionPlayers(player, region);
+            }
         }
 
         return names.isEmpty() && !hideGlobalRegion
                 ? globalBarMessage
                 : StringUtils.join(names, ", ");
     }
-
 
 
     private String compareRegionPlayers(Player player, String regionName) {
@@ -68,7 +68,8 @@ public final class RegionManager {
 
     private String getCustomRegionName(String region) {
         ConfigurationSection customRegions = plugin.getRegionsConfig().getConfig().getConfigurationSection("custom.");
-        assert customRegions != null;
+        if(customRegions == null) return null;
+
         if (customRegions.contains(region)) {
             String customRegion = customRegions.getString(region);
             return customRegion;
@@ -76,7 +77,6 @@ public final class RegionManager {
             return null;
         }
     }
-
 
 
     private String getRegion(Player player) {

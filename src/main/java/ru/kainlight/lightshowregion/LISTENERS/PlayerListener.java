@@ -20,9 +20,9 @@ public final class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        // LightPlayer.getAudience().player(player).sendActionBar(Component.text("hi"));
-
-        plugin.getActionbarManager().show(player);
+        if(player.hasPermission("lightshowregion.see")) {
+            plugin.getActionbarManager().toggle(player);
+        }
     }
 
     @EventHandler

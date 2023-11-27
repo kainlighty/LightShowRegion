@@ -1,8 +1,5 @@
 config-version: 1.0
 region:
-  toggle:
-    enabled: "&aОтображение региона включено"
-    disabled: "&aОтображение региона выключено"
   added: "Регион &c<region> &fдобавлен с именем <name>"
   removed: "Регион &c<region> &fудалён"
   exists: "Регион &c<region> &fуже существует"

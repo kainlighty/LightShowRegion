@@ -41,20 +41,6 @@ public final class LightShowRegion implements CommandExecutor {
         }
 
         switch (args[0].toLowerCase()) {
-            case "toggle" -> {
-                if(!(sender instanceof Player player)) return true;
-                if (!player.hasPermission("lightshowregion.toggle")) return true;
-
-                if(plugin.getActionbarManager().toggle(player)) {
-                    String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.disabled");
-                    LightPlayer.of(player).sendMessage(toggleMessage);
-                } else {
-                    String toggleMessage = plugin.getMessageConfig().getConfig().getString("region.toggle.enabled");
-                    LightPlayer.of(player).sendMessage(toggleMessage);
-                }
-
-                return true;
-            }
             case "reload" -> {
                 if (!sender.hasPermission("lightshowregion.reload.config") || !sender.hasPermission("lightshowregion.reload.bar")) return true;
 

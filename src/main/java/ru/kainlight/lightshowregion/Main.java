@@ -36,11 +36,10 @@ public final class Main extends LightPlugin {
     public void onEnable() {
         instance = this;
 
-        BukkitConfig.saveLanguages(this, "main-settings.lang");
         updateConfig();
+        BukkitConfig.saveLanguages(this, "main-settings.lang");
         messageConfig.updateConfig();
         regionsConfig = new BukkitConfig(this, "regions.yml");
-        regionsConfig.updateConfig();
 
         actionbarManager = new ActionbarManager(this);
         regionManager = new RegionManager(this);

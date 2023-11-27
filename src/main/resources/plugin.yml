@@ -16,8 +16,8 @@ commands:
 permissions:
   lightshowregion.help:
     default: op
-  lightshowregion.toggle:
-    default: op
+  lightshowregion.see:
+    default: true
   lightshowregion.add:
     default: op
   lightshowregion.remove:

@@ -1,8 +1,5 @@
 config-version: 1.0
 region:
-  toggle:
-    enabled: "&aDisplay region successfully enabled"
-    disabled: "&aDisplay region successfully disabled"
   added: "Region &c<region> &fadded with name <name>"
   removed: "Region &c<region> &fremoved"
   exists: "Region &c<region> &falready exists"
