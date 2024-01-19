@@ -1,4 +1,4 @@
-config-version: 1.0
+config-version: 1.2
 region:
   added: "Region &c<region> &fadded with name <name>"
   removed: "Region &c<region> &fremoved"

@@ -25,7 +25,9 @@ public final class ActionbarManager {
 
     public void show(Player player) {
         hide(player);
-        runTaskUpdateRegionName(player);
+
+        boolean isActionbar = plugin.getConfig().getBoolean("main-settings.actionbar");
+        if(isActionbar) runTaskUpdateRegionName(player);
     }
 
     public boolean toggle(Player player) {

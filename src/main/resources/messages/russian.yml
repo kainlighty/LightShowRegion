@@ -1,4 +1,4 @@
-config-version: 1.0
+config-version: 1.2
 region:
   added: "Регион &c<region> &fдобавлен с именем <name>"
   removed: "Регион &c<region> &fудалён"

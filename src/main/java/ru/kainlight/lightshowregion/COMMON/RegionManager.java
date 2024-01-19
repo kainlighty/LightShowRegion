@@ -18,6 +18,7 @@ public final class RegionManager {
     }
 
     public String sendRegionName(Player player) {
+        if(player == null) return "";
         List<String> names = new ArrayList<>();
 
         boolean hideGlobalRegion = plugin.getConfig().getBoolean("region-settings.hide-global-region");
@@ -60,9 +61,9 @@ public final class RegionManager {
         String regionMembers = getRegionMembers(player);
 
         if(regionOwner.contains(player.getName()) || regionMembers.contains(player.getName())) {
-            return your.replace("<name>", regionName).replace("<owner>", regionOwner);
+            return your.replace("<name>", regionName).replace("<owners>", regionOwner);
         } else {
-            return notYour.replace("<name>", regionName).replace("<owner>", regionOwner);
+            return notYour.replace("<name>", regionName).replace("<owners>", regionOwner);
         }
     }
 

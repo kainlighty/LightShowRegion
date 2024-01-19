@@ -36,14 +36,10 @@ public final class CustomRegionExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String identifier) {
-        if(offlinePlayer.hasPlayedBefore()) {
-            Player player = offlinePlayer.getPlayer();
-            if (player != null) {
-                if (identifier.equalsIgnoreCase("custom")) {
-                    return plugin.getRegionManager().sendRegionName(player);
-                }
-            }
+        if (identifier.equalsIgnoreCase("custom")) {
+            return plugin.getRegionManager().sendRegionName(offlinePlayer.getPlayer());
         }
-        return identifier;
+
+        return null;
     }
 }

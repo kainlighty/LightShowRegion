@@ -8,16 +8,34 @@
 
     <groupId>ru.kainlight.lightshowregion</groupId>
     <artifactId>LightShowRegion</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
     <packaging>jar</packaging>
-	
-	<developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/kainlighty/LightShowRegion?tab=MIT-1-ov-file#</url>
+        </license>
+    </licenses>
+
+    <developers>
         <developer>
             <id>kainlight</id>
+            <organization>kainlighty</organization>
             <name>Danil Panov</name>
             <url>vk.com/kainlight</url>
         </developer>
     </developers>
+
+    <organization>
+        <name>kainlighty</name>
+        <url>https://github.com/kainlighty</url>
+    </organization>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/kainlighty/LightShowRegion/issues</url>
+    </issueManagement>
 
     <properties>
         <java.version>16</java.version>
@@ -47,12 +65,12 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <relocations>
+                            <!--<relocations>
                                 <relocation>
                                     <pattern>net.kyori</pattern>
                                     <shadedPattern>${project.groupId}.shaded.net.kyori</shadedPattern>
                                 </relocation>
-                            </relocations>
+                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>

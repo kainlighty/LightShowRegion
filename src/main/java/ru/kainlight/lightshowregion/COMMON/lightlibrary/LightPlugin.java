@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 @Getter
 public class LightPlugin extends JavaPlugin {
 
-    private final double CONFIG_VERSION = 1.0;
+    private final double CONFIG_VERSION = 1.2;
     private final boolean paper = isPaperPlugin();
     public BukkitConfig messageConfig;
 

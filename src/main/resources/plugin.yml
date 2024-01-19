@@ -3,7 +3,6 @@ version: '${project.version}'
 main: ru.kainlight.lightshowregion.Main
 api-version: 1.16
 softdepend: [ PlaceholderAPI ]
-loadbefore: [ PlaceholderAPI ]
 authors: [ kainlight ]
 description: Show Region Name in Actionbar
 website: vk.com/kainlight

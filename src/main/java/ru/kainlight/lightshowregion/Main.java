@@ -36,7 +36,7 @@ public final class Main extends LightPlugin {
     public void onEnable() {
         instance = this;
 
-        updateConfig();
+        this.updateConfig();
         BukkitConfig.saveLanguages(this, "main-settings.lang");
         messageConfig.updateConfig();
         regionsConfig = new BukkitConfig(this, "regions.yml");
@@ -60,7 +60,7 @@ public final class Main extends LightPlugin {
     }
 
     private void registerPlaceholders() {
-        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
+        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && !PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
             new CustomRegionExpansion(this).register();
         }
     }

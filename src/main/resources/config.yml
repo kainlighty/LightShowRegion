@@ -1,8 +1,9 @@
-config-version: 1.0
+config-version: 1.2
 update-notification: true
 
 main-settings:
   lang: RUSSIAN
+  actionbar: true
 
 region-settings:
   hide-global-region: false
