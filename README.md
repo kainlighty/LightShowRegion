@@ -15,7 +15,6 @@
 | Command                          | Description                             | Permission                       |
 |----------------------------------|-----------------------------------------|----------------------------------|
 | lsr                              | Help by commands                        | lightshowregion.help             |
-| lsr toggle                       | enable or disable                       | lightshowregion.toggle           |
 | lsr add \<region> \<custom name> | Add a custom name to a region           | lightshowregion.add              |
 | lsr remove \<region>             | Remove custom name                      | lightshowregion.remove           |
 | lsr blacklist add \<region>      | Add a region to the blacklist           | lightshowregion.blacklist.add    |
@@ -26,6 +25,7 @@
 
 | Permissions without commands | Description                        |
 |------------------------------|------------------------------------|
+| lightshowregion.see          | Ability to see the region in the ActionBar (default: true) |
 | lightshowregion.blacklist.*  | All rights to manage the blacklist |
 | lightshowregion.*            | Full access to the plugin          |
 
