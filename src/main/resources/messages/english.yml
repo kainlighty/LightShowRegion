@@ -17,4 +17,4 @@ actionbar:
   blacklisted: "&4&lTHIS REGION IS BLACKLISTED"
   global: "&e&lFREE TERRITORY"
   your: "&a&lYOUR TERRITORY"
-  not-your: "&c&lOCCUPIED TERRITORY"
+  not-your: "&c&lOCCUPIED TERRITORY" # <owners> - region owner
