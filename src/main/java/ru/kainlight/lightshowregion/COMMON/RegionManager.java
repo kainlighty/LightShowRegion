@@ -58,6 +58,7 @@ public final class RegionManager {
         String your = plugin.getMessageConfig().getConfig().getString("actionbar.your");
 
         String regionOwner = getRegionOwner(player);
+        System.out.println(regionOwner);
         String regionMembers = getRegionMembers(player);
 
         if(regionOwner.contains(player.getName()) || regionMembers.contains(player.getName())) {

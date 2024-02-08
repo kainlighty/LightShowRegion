@@ -28,20 +28,18 @@ public final class LightShowRegion implements CommandExecutor {
             if (!sender.hasPermission("lightshowregion.help")) return true;
             sender.sendMessage("");
             LightPlayer.of(sender).sendMessage(" &f&m   &c&l LIGHTSHOWREGION HELP &f&m   ");
-            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr toggle");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr add <region> <name>");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr remove <region>");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr blacklist add <region>");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr blacklist remove <region>");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr global");
             LightPlayer.of(sender).sendMessage("&c&l » &f/lsr reload <config|bar>");
-            LightPlayer.of(sender).sendMessage("&c&l » &f/lsr reconfig (only console)");
             sender.sendMessage("");
             return true;
         }
 
         switch (args[0].toLowerCase()) {
-            case "reload" -> {
+            case "reload": {
                 if (!sender.hasPermission("lightshowregion.reload.config") || !sender.hasPermission("lightshowregion.reload.bar")) return true;
 
                 if (args.length < 2) {
@@ -65,8 +63,9 @@ public final class LightShowRegion implements CommandExecutor {
                     LightPlayer.of(sender).sendMessage(reloadBar);
                     return true;
                 }
+                break;
             }
-            case "global" -> {
+            case "global": {
                 if (!sender.hasPermission("lightshowregion.global")) return true;
 
                 boolean isHideGlobalRegion = plugin.getConfig().getBoolean("region-settings.hide-global-region");
@@ -75,8 +74,9 @@ public final class LightShowRegion implements CommandExecutor {
 
                 String global = plugin.getMessageConfig().getConfig().getString("region.global");
                 LightPlayer.of(sender).sendMessage(global);
+                break;
             }
-            case "add" -> {
+            case "add": {
                 if (!sender.hasPermission("lightshowregion.add")) return true;
 
                 if (args.length < 3) {
@@ -106,8 +106,9 @@ public final class LightShowRegion implements CommandExecutor {
                         .replace("<region>", region)
                         .replace("<name>", rgcustomnamehex);
                 LightPlayer.of(sender).sendMessage(regionAdded);
+                break;
             }
-            case "remove" -> {
+            case "remove": {
                 if (!sender.hasPermission("lightshowregion.remove")) return true;
 
                 if (args.length < 2) {
@@ -129,8 +130,9 @@ public final class LightShowRegion implements CommandExecutor {
                 plugin.getRegionsConfig().saveConfig();
                 String regionRemoved = plugin.getMessageConfig().getConfig().getString("region.removed").replace("<region>", region);
                 LightPlayer.of(sender).sendMessage(regionRemoved);
+                break;
             }
-            case "blacklist" -> {
+            case "blacklist": {
                 List<String> blacklisted = plugin.getConfig().getStringList("region-settings.blacklist");
                 if (args[1].equalsIgnoreCase("add")) {
                     if (!sender.hasPermission("lightshowregion.blacklist.add")) return true;
@@ -170,8 +172,9 @@ public final class LightShowRegion implements CommandExecutor {
                     LightPlayer.of(sender).sendMessage(message);
                     return true;
                 }
+                break;
             }
-            default -> { return true; }
+            default: { break; }
         }
         return true;
     }
@@ -204,9 +207,9 @@ public final class LightShowRegion implements CommandExecutor {
 
         public TabCompletion() {
             completions.put("forUser", Collections.singletonList("toggle"));
-            completions.put("all", Arrays.asList("toggle", "add", "remove", "blacklist", "notify", "global", "reload"));
+            completions.put("all", Arrays.asList("add", "remove", "blacklist", "global", "reload"));
             completions.put("blacklist", Arrays.asList("add", "remove"));
-            completions.put("reload", Arrays.asList("config", "plugin", "bar"));
+            completions.put("reload", Arrays.asList("config", "bar"));
         }
 
         @Override
@@ -221,15 +224,17 @@ public final class LightShowRegion implements CommandExecutor {
             }
 
             switch (args[0].toLowerCase()) {
-                case "blacklist" -> {
+                case "blacklist": {
                     if (args.length == 2 && sender.hasPermission("lightshowregion.blacklist.add") || sender.hasPermission("lightshowregion.blacklist.remove")) {
                         return completions.get("blacklist");
                     }
+                    break;
                 }
-                case "reload" -> {
+                case "reload": {
                     if (args.length == 2 && sender.hasPermission("lightshowregion.reload.bar") || sender.hasPermission("lightshowregion.reload.config")) {
                         return completions.get("reload");
                     }
+                    break;
                 }
             }
             return null;

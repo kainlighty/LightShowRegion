@@ -105,7 +105,8 @@ public final class BukkitConfig {
             try {
                 // Создать подключение к этому URL
                 URLConnection connection = url.openConnection();
-                if (connection instanceof JarURLConnection jarConnection) {
+                if (connection instanceof JarURLConnection) {
+                    JarURLConnection jarConnection = (JarURLConnection) connection;
                     // Получить JAR файл
                     JarFile jar = jarConnection.getJarFile();
 

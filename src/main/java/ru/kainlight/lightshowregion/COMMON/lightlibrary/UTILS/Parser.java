@@ -44,7 +44,7 @@ public final class Parser {
     }
 
     public List<String> hex(List<String> messages) {
-        if(messages.isEmpty()) return List.of("");
+        if(messages.isEmpty()) return new ArrayList<>();
         List<String> copyMessages = new ArrayList<>();
         messages.forEach(message -> {
             String s = hexString(message);

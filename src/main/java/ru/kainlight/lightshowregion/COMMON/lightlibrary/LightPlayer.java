@@ -15,7 +15,6 @@ import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Parser;
 import ru.kainlight.lightshowregion.Main;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -158,9 +157,11 @@ public final class LightPlayer {
 
     public static void sendMessageForAll(String... message) {
         if (message == null) return;
-        List<String> messages = Arrays.stream(message).toList();
-        if (messages.isEmpty()) return;
-        sendMessageForAll(messages);
+
+        for (String msg : message) {
+            sendMessageForAll(msg);
+        }
+
     }
 
 }

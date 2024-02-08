@@ -66,9 +66,11 @@ public final class Main extends LightPlugin {
     }
 
     private void unregisterPlaceholders() {
-        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
-            new CustomRegionExpansion(this).unregister();
-        }
+        try {
+            if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
+                new CustomRegionExpansion(this).unregister();
+            }
+        } catch (Exception ignored) {}
     }
 
 }
