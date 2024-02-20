@@ -1,76 +1,62 @@
-package ru.kainlight.lightshowregion;
+package ru.kainlight.lightshowregion
 
-import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
-import ru.kainlight.lightshowregion.COMMANDS.LightShowRegion;
-import ru.kainlight.lightshowregion.COMMON.ActionbarManager;
-import ru.kainlight.lightshowregion.COMMON.RegionManager;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.CONFIGS.BukkitConfig;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.LightPlugin;
-import ru.kainlight.lightshowregion.COMMON.lightlibrary.UTILS.Initiators;
-import ru.kainlight.lightshowregion.HOOKS.PlaceholderAPI.CustomRegionExpansion;
-import ru.kainlight.lightshowregion.LISTENERS.PlayerListener;
+import me.clip.placeholderapi.PlaceholderAPI
+import ru.kainlight.lightshowregion.COMMANDS.LSRCommand
+import ru.kainlight.lightshowregion.HOOKS.PAPIExtension
+import ru.kainlight.lightshowregion.LISTENERS.PlayerListener
+import ru.kainlight.lightshowregion.UTILS.ActionbarManager
+import ru.kainlight.lightshowregion.UTILS.RegionManager
+import ru.kainlight.lightshowregion.library.LightConfig
+import ru.kainlight.lightshowregion.library.LightPlugin
+import ru.kainlight.lightshowregion.library.UTILS.Initiators
 
-import java.util.Collection;
-import java.util.Map;
+class Main : LightPlugin() {
+    companion object { lateinit var INSTANCE: Main }
 
-@Getter
-@SuppressWarnings("all")
-public final class Main extends LightPlugin {
+    private var messageConfig: LightConfig? = null
+    private var regionsConfig: LightConfig? = null
+    val actionbarManager: ActionbarManager = ActionbarManager()
+    val regionManager: RegionManager = RegionManager()
 
-    @Getter
-    private static Main instance;
-
-    private BukkitConfig regionsConfig;
-    private ActionbarManager actionbarManager;
-    private RegionManager regionManager;
-
-    @Override
-    public void onLoad() {
-        this.saveDefaultConfig();
+    override fun onLoad() {
+        this.saveDefaultConfig()
+        messageConfig = LightConfig.saveLanguages(this, "main-settings.lang")
     }
 
-    @Override
-    public void onEnable() {
-        instance = this;
+    override fun onEnable() {
+        INSTANCE = this
 
-        this.updateConfig();
-        BukkitConfig.saveLanguages(this, "main-settings.lang");
-        messageConfig.updateConfig();
-        regionsConfig = new BukkitConfig(this, "regions.yml");
+        this.updateConfig()
+        this.getMessageConfig().updateConfig()
+        regionsConfig = LightConfig(this, "regions.yml")
 
-        actionbarManager = new ActionbarManager(this);
-        regionManager = new RegionManager(this);
+        registerCommand("lightshowregion", LSRCommand(this))
+        registerListener(PlayerListener(this))
 
-        registerCommand("lightshowregion", new LightShowRegion(this));
-        registerListener(new PlayerListener(this));
+        registerPlaceholders()
 
-        registerPlaceholders();
-
-        Initiators.startPluginMessage(this);
+        Initiators.startPluginMessage(this)
     }
 
-    @Override
-    public void onDisable() {
-        unregisterPlaceholders();
-
-        this.getServer().getScheduler().cancelTasks(this);
+    override fun onDisable() {
+        unregisterPlaceholders()
+        server.scheduler.cancelTasks(this)
     }
 
-    private void registerPlaceholders() {
-        if(this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && !PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
-            new CustomRegionExpansion(this).register();
+    private fun registerPlaceholders() {
+        if (server.pluginManager.isPluginEnabled("PlaceholderAPI") && ! PlaceholderAPI.isRegistered(description.name.toLowerCase())) {
+            PAPIExtension(this).register()
         }
     }
 
-    private void unregisterPlaceholders() {
+    private fun unregisterPlaceholders() {
         try {
-            if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.getDescription().getName().toLowerCase())) {
-                new CustomRegionExpansion(this).unregister();
+            if (server.pluginManager.isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(description.name.toLowerCase())) {
+                PAPIExtension(this).unregister()
             }
-        } catch (Exception ignored) {}
+        } catch (ignored: Exception) { }
     }
 
+    fun getMessageConfig(): LightConfig { return messageConfig!! }
+    fun getRegionsConfig(): LightConfig { return regionsConfig!! }
 }

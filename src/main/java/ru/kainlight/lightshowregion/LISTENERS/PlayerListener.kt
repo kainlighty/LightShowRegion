@@ -1,38 +1,29 @@
-package ru.kainlight.lightshowregion.LISTENERS;
+package ru.kainlight.lightshowregion.LISTENERS
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import ru.kainlight.lightshowregion.Main;
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerKickEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import ru.kainlight.lightshowregion.Main
 
-public final class PlayerListener implements Listener {
-
-    private final Main plugin;
-
-    public PlayerListener(Main plugin) {
-        this.plugin = plugin;
-    }
-
+class PlayerListener(private val plugin: Main) : Listener {
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        val player = event.player
 
-        if(player.hasPermission("lightshowregion.see")) {
-            plugin.getActionbarManager().toggle(player);
+        if (player.hasPermission("lightshowregion.see")) {
+            plugin.actionbarManager.toggle(player)
         }
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        plugin.getActionbarManager().hide(event.getPlayer());
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        plugin.actionbarManager.hide(event.player)
     }
 
     @EventHandler
-    public void onPlayerKick(PlayerKickEvent event) {
-        plugin.getActionbarManager().hide(event.getPlayer());
+    fun onPlayerKick(event: PlayerKickEvent) {
+        plugin.actionbarManager.hide(event.player)
     }
-
 }
