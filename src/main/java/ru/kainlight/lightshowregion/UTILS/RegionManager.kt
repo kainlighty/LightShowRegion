@@ -11,7 +11,7 @@ class RegionManager {
     fun sendRegionName(player: Player?): String {
         if (player == null) return ""
         val names: MutableList<String?> = ArrayList()
-        val msgs = Main.INSTANCE.getMessageConfig().getConfig()
+        val msgs = Main.INSTANCE.messageConfig.getConfig()
 
         val hideGlobalRegion: Boolean = Main.INSTANCE.getConfig().getBoolean("region-settings.hide-global-region")
         val globalBarMessage: String = msgs.getString("actionbar.global")!!
@@ -30,7 +30,7 @@ class RegionManager {
 
                 names.add(regionCustomName)
                 return if (regionCustomName.startsWith("!")) regionCustomName.substring(1)
-                else regionBarMessage.replace("<region>", regionCustomName)
+                else regionBarMessage.replace("%region%", regionCustomName)
             } else {
                 return compareRegionPlayers(player, region)
             }
@@ -41,7 +41,7 @@ class RegionManager {
     }
 
     private fun compareRegionPlayers(player: Player, regionName: String): String {
-        val msgs = Main.INSTANCE.getMessageConfig().getConfig()
+        val msgs = Main.INSTANCE.messageConfig.getConfig()
 
         val notYour: String = msgs.getString("actionbar.not-your")!!
         val your: String = msgs.getString("actionbar.your")!!
@@ -50,9 +50,9 @@ class RegionManager {
         val regionMembers: String = getRegionMembers(player)
 
         return if (regionOwner.contains(player.name) || regionMembers.contains(player.name)) {
-            your.replace("<name>", regionName).replace("<owners>", regionOwner)
+            your.replace("%name%", regionName).replace("%owners%", regionOwner)
         } else {
-            notYour.replace("<name>", regionName).replace("<owners>", regionOwner)
+            notYour.replace("%name%", regionName).replace("%owners%", regionOwner)
         }
     }
 

@@ -2,8 +2,8 @@ package ru.kainlight.lightshowregion.UTILS
 
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
+import ru.kainlight.lightlibrary.actionbar
 import ru.kainlight.lightshowregion.Main
-import ru.kainlight.lightshowregion.library.actionbar
 
 class ActionbarManager {
 
@@ -40,7 +40,7 @@ class ActionbarManager {
 
     fun runTaskUpdateRegionName(player: Player): Unit {
         val disabledWorlds = Main.INSTANCE.config.getStringList("region-settings.disabled-worlds")
-        val global = Main.INSTANCE.getMessageConfig().config.getString("actionbar.global")
+        val global = Main.INSTANCE.messageConfig.getConfig().getString("actionbar.global")
 
         actionbarTask.put(player, Main.INSTANCE.server.scheduler.runTaskTimerAsynchronously(Main.INSTANCE, Runnable {
             if (player == null) return@Runnable

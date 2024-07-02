@@ -1,62 +1,62 @@
 package ru.kainlight.lightshowregion
 
 import me.clip.placeholderapi.PlaceholderAPI
+import ru.kainlight.lightlibrary.LightConfig
+import ru.kainlight.lightlibrary.LightPlugin
+import ru.kainlight.lightlibrary.UTILS.Init
 import ru.kainlight.lightshowregion.COMMANDS.LSRCommand
 import ru.kainlight.lightshowregion.HOOKS.PAPIExtension
 import ru.kainlight.lightshowregion.LISTENERS.PlayerListener
 import ru.kainlight.lightshowregion.UTILS.ActionbarManager
 import ru.kainlight.lightshowregion.UTILS.RegionManager
-import ru.kainlight.lightshowregion.library.LightConfig
-import ru.kainlight.lightshowregion.library.LightPlugin
-import ru.kainlight.lightshowregion.library.UTILS.Initiators
 
 class Main : LightPlugin() {
     companion object { lateinit var INSTANCE: Main }
 
-    private var messageConfig: LightConfig? = null
     private var regionsConfig: LightConfig? = null
     val actionbarManager: ActionbarManager = ActionbarManager()
     val regionManager: RegionManager = RegionManager()
 
     override fun onLoad() {
         this.saveDefaultConfig()
-        messageConfig = LightConfig.saveLanguages(this, "main-settings.lang")
+        LightConfig.saveLanguages(this, "main-settings.lang")
     }
 
     override fun onEnable() {
         INSTANCE = this
 
+        configurationVersion = 1.3
+        messageConfig.configurationVersion = 1.3
+
         this.updateConfig()
-        this.getMessageConfig().updateConfig()
-        regionsConfig = LightConfig(this, "regions.yml")
+        this.messageConfig.updateConfig()
+        regionsConfig = LightConfig(this, null,"regions.yml")
 
         registerCommand("lightshowregion", LSRCommand(this))
         registerListener(PlayerListener(this))
+        this.registerPlaceholders()
 
-        registerPlaceholders()
-
-        Initiators.startPluginMessage(this)
+        Init.start(this, true)
     }
 
     override fun onDisable() {
-        unregisterPlaceholders()
-        server.scheduler.cancelTasks(this)
+        this.unregisterPlaceholders()
+        this.server.scheduler.cancelTasks(this)
     }
 
     private fun registerPlaceholders() {
-        if (server.pluginManager.isPluginEnabled("PlaceholderAPI") && ! PlaceholderAPI.isRegistered(description.name.toLowerCase())) {
+        if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && ! PlaceholderAPI.isRegistered(this.description.name.lowercase())) {
             PAPIExtension(this).register()
         }
     }
 
     private fun unregisterPlaceholders() {
         try {
-            if (server.pluginManager.isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(description.name.toLowerCase())) {
+            if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.description.name.lowercase())) {
                 PAPIExtension(this).unregister()
             }
-        } catch (ignored: Exception) { }
+        } catch (_: Exception) {}
     }
 
-    fun getMessageConfig(): LightConfig { return messageConfig!! }
     fun getRegionsConfig(): LightConfig { return regionsConfig!! }
 }

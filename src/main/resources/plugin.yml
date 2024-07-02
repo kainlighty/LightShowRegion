@@ -1,11 +1,17 @@
 name: LightShowRegion
 version: '${project.version}'
 main: ru.kainlight.lightshowregion.Main
+api-version: 1.16
 
 softdepend: [ PlaceholderAPI ]
 author: kainlight
 description: Show Region Name in Actionbar
 website: vk.com/kainlight
+
+libraries:
+  - net.kyori:adventure-api:${kyori.adventure}
+#  - net.kyori:adventure-text-serializer-legacy:${kyori.adventure}
+  - org.jetbrains.kotlin:kotlin-stdlib:${kotlin.version}
 
 commands:
   lightshowregion:

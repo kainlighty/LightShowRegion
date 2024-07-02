@@ -6,6 +6,7 @@ import ru.kainlight.lightshowregion.Main
 import java.util.*
 
 class PAPIExtension(private val plugin: Main) : PlaceholderExpansion() {
+
     override fun getIdentifier(): String = plugin.description.name.lowercase(Locale.getDefault())
     override fun getAuthor(): String = plugin.description.authors[0]
     override fun getVersion(): String = plugin.description.version

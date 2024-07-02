@@ -1,20 +1,20 @@
-config-version: 1.2
+config-version: 1.3
 region:
-  added: "Регион &c<region> &fдобавлен с именем <name>"
-  removed: "Регион &c<region> &fудалён"
-  exists: "Регион &c<region> &fуже существует"
-  notFound: "Регион &c<region> &fне найден"
+  added: "Регион <red>%region% <white>добавлен с именем %name%"
+  removed: "Регион <red>%region% <white>удалён"
+  exists: "Регион <red>%region% <white>уже существует"
+  notFound: "Регион <red>%region% <white>не найден"
   blacklist:
-    added: "Регион &c<region> &fбыл добавлен в &cчерный список"
-    removed: "Регион &c<region> &fбыл удалён из &cчерного списока"
-  global: "&aОтображение глобального региона изменено"
+    added: "Регион <red>%region% <white>был добавлен в <red>черный список"
+    removed: "Регион <red>%region% <white>был удалён из <red>черного списока"
+  global: "<green>Отображение глобального региона изменено"
   reload:
-    config: "&aКонфигурация успешно перезагружена"
-    bar: "&aActionBar успешно перезагружен у всех игроков"
+    config: "<green>Конфигурация успешно перезагружена"
+    bar: "<yellow>ActionBar успешно перезагружен у всех игроков"
 
 actionbar:
-  region: "&6&lВЫ НАХОДИТЕСЬ В РЕГИОНЕ <region>"
-  blacklisted: "&4&lРЕГИОН ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК"
-  global: "&e&lСВОБОДНАЯ ТЕРРИТОРИЯ"
-  your: "&a&lВАША ТЕРРИТОРИЯ"
-  not-your: "&c&lЗАНЯТАЯ ТЕРРИТОРИЯ" # <owners> - владелец региона
+  region: "<gold><bold>ВЫ НАХОДИТЕСЬ В РЕГИОНЕ %region%<bold>"
+  blacklisted: "<maroon><bold>РЕГИОН ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК<bold>"
+  global: "<yellow><bold>СВОБОДНАЯ ТЕРРИТОРИЯ<bold>"
+  your: "<green><bold>ВАША ТЕРРИТОРИЯ</bold>"
+  not-your: "<red><bold>ЗАНЯТАЯ ТЕРРИТОРИЯ<bold>" # %owners% - владелец региона

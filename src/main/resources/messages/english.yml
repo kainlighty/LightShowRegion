@@ -1,20 +1,20 @@
-config-version: 1.2
+config-version: 1.3
 region:
-  added: "Region &c<region> &fadded with name <name>"
-  removed: "Region &c<region> &fremoved"
-  exists: "Region &c<region> &falready exists"
-  notFound: "Region &c<region> &fnot found"
+  added: "Region <red>%region% <white>added with name %name%"
+  removed: "Region <red>%region% <white>removed"
+  exists: "Region <red>%region% <white>already exists"
+  notFound: "Region <red>%region% <white>not found"
   blacklist:
-    added: "Region &c<region> &fhas been &cblacklisted"
-    removed: "Region &c<region> &fwas removed from the &cblacklist"
-  global: "&aGlobal region display changed"
+    added: "Region <red>%region% <white>has been <red>blacklisted"
+    removed: "Region <red>%region% <white>was removed from the <red>blacklist"
+  global: "<green>Global region display changed"
   reload:
-    config: "&aConfigurations reloaded"
-    bar: "&aActionBar reloaded for all players"
+    config: "<green>Configurations reloaded"
+    bar: "<green>ActionBar reloaded for all players"
 
 actionbar:
-  region: "&6&lYOU ARE LOCATED IN THE REGION <region>"
-  blacklisted: "&4&lTHIS REGION IS BLACKLISTED"
-  global: "&e&lFREE TERRITORY"
-  your: "&a&lYOUR TERRITORY"
-  not-your: "&c&lOCCUPIED TERRITORY" # <owners> - region owner
+  region: "<gold><bold>YOU ARE LOCATED IN THE REGION %region%</bold>"
+  blacklisted: "<maroon><bold>THIS REGION IS BLACKLISTED</bold>"
+  global: "<yellow><bold>FREE TERRITORY</bold>"
+  your: "<green><bold>YOUR TERRITORY</bold>"
+  not-your: "<red><bold>OCCUPIED TERRITORY</bold>" # %owners% - region owner

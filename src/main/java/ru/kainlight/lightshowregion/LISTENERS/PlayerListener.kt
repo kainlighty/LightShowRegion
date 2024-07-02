@@ -1,5 +1,6 @@
 package ru.kainlight.lightshowregion.LISTENERS
 
+import net.kyori.adventure.text.Component
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -12,9 +13,7 @@ class PlayerListener(private val plugin: Main) : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
 
-        if (player.hasPermission("lightshowregion.see")) {
-            plugin.actionbarManager.toggle(player)
-        }
+        if (player.hasPermission("lightshowregion.see")) plugin.actionbarManager.toggle(player)
     }
 
     @EventHandler
