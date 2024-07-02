@@ -1,11 +1,15 @@
-name: Bug report
+name: ⚠️ Bug
 description: Create a bug report
-labels: ["bug"]
+labels: [ "bug" ]
 body:
-  - type: input
+  - type: dropdown
     id: plugin-version
     attributes:
       label: Plugin Version
+      options:
+        - 1.4.0
+      default: 0
+      description: Versions below 1.4.0 are not supported
     validations:
       required: true
   - type: dropdown
@@ -13,13 +17,11 @@ body:
     attributes:
       label: Select The Core
       options:
-        - Spigot
         - Paper
         - Purpur
         - Airplane
         - Pufferfish
-        - Mirai
-        - Patina
+        - Spigot
     validations:
       required: true
   - type: textarea
@@ -29,3 +31,9 @@ body:
       description: Be sure to insert StackTrace errors. If there isn't one, describe the problem in as much detail as possible.
     validations:
       required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Stacktrace
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
