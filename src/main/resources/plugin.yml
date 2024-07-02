@@ -1,7 +1,7 @@
 name: LightShowRegion
 version: '${project.version}'
 main: ru.kainlight.lightshowregion.Main
-api-version: 1.16
+api-version: 1.17
 
 softdepend: [ PlaceholderAPI ]
 author: kainlight
