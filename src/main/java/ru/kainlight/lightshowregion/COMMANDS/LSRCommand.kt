@@ -5,69 +5,34 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import ru.kainlight.lightlibrary.UTILS.Parser
+import ru.kainlight.lightlibrary.equalsIgnoreCase
 import ru.kainlight.lightlibrary.message
+import ru.kainlight.lightlibrary.multiMessage
 import ru.kainlight.lightshowregion.Main
+import ru.kainlight.lightshowregion.getAudience
 
-
+@Suppress("WARNINGS")
 class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-
-        val COMMANDS: String = """
-             
-             <white><st>   </st> <red><bold> LIGHTSHOWREGION HELP </bold><white><st>   </st>
-             <red><bold> » </bold><white>/lsr add <region> <name>
-             <red><bold> » </bold><white>/lsr remove <region>
-             <red><bold> » </bold><white>/lsr blacklist add <region>
-             <red><bold> » </bold><white>/lsr blacklist remove <region>
-             <red><bold> » </bold><white>/lsr global
-             <red><bold> » </bold><white>/lsr reload <config|bar>
-              
-        """.trimIndent()
-
         if (args.size == 0) {
             if (! sender.hasPermission("lightshowregion.help")) return true
-            sender.message(COMMANDS)
+            val helpMessage = plugin.messageConfig.getConfig().getStringList("help.commands")
+
+            helpMessage.forEach { sender.getAudience().multiMessage(it) }
             return true
         }
 
+        val helpSection = plugin.messageConfig.getConfig().getConfigurationSection("help")
+
         return when (args[0].lowercase()) {
-            "reload" -> {
-                if (! sender.hasPermission("lightshowregion.reload.config") || ! sender.hasPermission("lightshowregion.reload.bar")) return true
-
-                if (args.size < 2) {
-                    sender.message("&c&l » &f/lsr reload <config|bar>")
-                    return true
-                }
-                if (args[1].equals("config", ignoreCase = true)) {
-                    if (! sender.hasPermission("lightshowregion.reload.config")) return true
-
-                    this.reloadConfigs()
-                    plugin.messageConfig.getConfig().getString("region.reload.config")?.let {
-                        sender.message(it)
-                    }
-                    return true
-                }
-                if (args[1].equals("bar", ignoreCase = true)) {
-                    if (! sender.hasPermission("lightshowregion.reload.bar")) return true
-
-                    plugin.server.onlinePlayers.forEach {
-                        plugin.actionbarManager.show(it)
-                    }
-                    plugin.messageConfig.getConfig().getString("region.reload.bar")?.let {
-                        sender.message(it)
-                    }
-                    return true
-                }
-
-                return true
-            }
-
             "add" -> {
-                if (!sender.hasPermission("lightshowregion.add")) return true;
+                if (! sender.hasPermission("lightshowregion.add")) return true;
 
                 if (args.size < 3) {
-                    sender.message("&c&l » &f/lsr add <region> <name>");
+                    helpSection?.getString("add")?.let {
+                        sender.getAudience().multiMessage(it)
+                    }
                     return true
                 }
 
@@ -75,7 +40,7 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
                 val isRegionExists: Boolean = plugin.getRegionsConfig().getConfig().contains("custom." + region)
                 if (isRegionExists) {
                     plugin.messageConfig.getConfig().getString("region.exists")?.let {
-                        sender.message(it.replace("%region%", region))
+                        sender.getAudience().multiMessage(it.replace("%region%", region))
                     }
                     return true;
                 }
@@ -94,7 +59,7 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
                 plugin.getRegionsConfig().saveConfig()
 
                 plugin.messageConfig.getConfig().getString("region.added")?.let {
-                    sender.message(it.replace("%region%", region).replace("%name%", rgcustomnamehex))
+                    sender.getAudience().multiMessage(it.replace("%region%", region).replace("%name%", rgcustomnamehex))
                 }
 
                 return true
@@ -103,7 +68,9 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
             "remove" -> {
                 if (! sender.hasPermission("lightshowregion.remove")) return true
                 if (args.size < 2) {
-                    sender.message("&c&l » &f/lsr remove <region>")
+                    helpSection?.getString("remove")?.let {
+                        sender.getAudience().multiMessage(it)
+                    }
                     return true
                 }
 
@@ -111,7 +78,7 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
                 val isRegionExists = plugin.getRegionsConfig().getConfig().contains("custom.$region")
                 if (! isRegionExists) {
                     plugin.messageConfig.getConfig().getString("region.notFound")?.let {
-                        sender.message(it.replace("%region%", region))
+                        sender.getAudience().multiMessage(it.replace("%region%", region))
                     }
                     return true
                 }
@@ -121,7 +88,7 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
                 plugin.getRegionsConfig().saveConfig()
 
                 plugin.messageConfig.getConfig().getString("region.removed")?.let {
-                    sender.message(it.replace("%region%", region))
+                    sender.getAudience().multiMessage(it.replace("%region%", region))
                 }
                 return true
             }
@@ -129,46 +96,62 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
             "blacklist" -> {
                 val blacklisted = plugin.config.getStringList("region-settings.blacklist")
 
-                if (args[1].equals("add", ignoreCase = true)) {
+                if (args[1].equalsIgnoreCase("add")) {
                     if (! sender.hasPermission("lightshowregion.blacklist.add")) return true
 
                     if (args.size < 3) {
-                        sender.message("&c&l » &f/lsr blacklist add <region>")
+                        helpSection?.getString("blacklist.add")?.let {
+                            sender.getAudience().multiMessage(it)
+                        }
                         return true
                     }
 
                     val region = args[2]
                     if (blacklisted.contains(region)) {
                         plugin.messageConfig.getConfig().getString("region.exists")?.let {
-                            sender.message(it.replace("%region%", region))
+                            sender.getAudience().multiMessage(it.replace("%region%", region))
                         }
                         return true
                     }
 
-                    blacklistManage(blacklisted, region, "added")?.let {
-                        sender.message(it)
+                    blacklisted.add(region)
+
+                    plugin.config["region-settings.blacklist"] = blacklisted
+                    plugin.saveConfig()
+                    plugin.reloadConfig()
+
+                    plugin.messageConfig.getConfig().getString("region.blacklist.added")?.let {
+                        sender.getAudience().multiMessage(it.replace("%region%", region))
                     }
 
                     return true
                 }
-                if (args[1].equals("remove", ignoreCase = true)) {
+                if (args[1].equalsIgnoreCase("remove")) {
                     if (! sender.hasPermission("lightshowregion.blacklist.remove")) return true
 
                     if (args.size < 3) {
-                        sender.message("&c&l » &f/lsr blacklist remove <region>")
-                        return true
-                    }
-
-                    val region = args[2]
-                    if (! blacklisted.contains(region)) {
-                        plugin.messageConfig.getConfig().getString("region.notFound")?.let {
-                            sender.message(it.replace("%region%", region))
+                        helpSection?.getString("blacklist.remove")?.let {
+                            sender.getAudience().multiMessage(it)
                         }
                         return true
                     }
 
-                    blacklistManage(blacklisted, region, "removed")?.let {
-                        sender.message(it)
+                    val region = args[2]
+                    if (!blacklisted.contains(region)) {
+                        plugin.messageConfig.getConfig().getString("region.notFound")?.let {
+                            sender.getAudience().multiMessage(it.replace("%region%", region))
+                        }
+                        return true
+                    }
+
+                    blacklisted.remove(region)
+
+                    plugin.config["region-settings.blacklist"] = blacklisted
+                    plugin.saveConfig()
+                    plugin.reloadConfig()
+
+                    plugin.messageConfig.getConfig().getString("region.blacklist.removed")?.let {
+                        sender.getAudience().multiMessage(it.replace("%region%", region))
                     }
                     return true
                 }
@@ -176,14 +159,47 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
             }
 
             "global" -> {
-                    if (! sender.hasPermission("lightshowregion.global")) return true
-                    val isHideGlobalRegion = plugin.config.getBoolean("region-settings.hide-global-region")
-                    plugin.config["region-settings.hide-global-region"] = ! isHideGlobalRegion
-                    plugin.saveConfig()
+                if (! sender.hasPermission("lightshowregion.global")) return true
+                val isHideGlobalRegion = plugin.config.getBoolean("region-settings.hide-global-region")
+                plugin.config["region-settings.hide-global-region"] = ! isHideGlobalRegion
+                plugin.saveConfig()
 
-                    plugin.messageConfig.getConfig().getString("region.global")?.let {
-                        sender.message(it)
+                plugin.messageConfig.getConfig().getString("region.global")?.let {
+                    sender.getAudience().multiMessage(it)
+                }
+                return true
+            }
+
+            "reload" -> {
+                if (! sender.hasPermission("lightshowregion.reload.config") || ! sender.hasPermission("lightshowregion.reload.bar")) return true
+
+                if (args.size < 2) {
+                    helpSection?.getString("reload")?.let {
+                        sender.getAudience().multiMessage(it)
                     }
+                    return true
+                }
+                if (args[1].equalsIgnoreCase("config")) {
+                    if (! sender.hasPermission("lightshowregion.reload.config")) return true
+
+                    this.reloadConfigs()
+                    plugin.messageConfig.getConfig().getString("region.reload.config")?.let {
+                        sender.getAudience().multiMessage(it)
+                    }
+                    return true
+                }
+                if (args[1].equalsIgnoreCase("bar")) {
+                    if (! sender.hasPermission("lightshowregion.reload.bar")) return true
+
+                    plugin.server.onlinePlayers.forEach {
+                        plugin.actionbarManager.show(it)
+                    }
+                    plugin.messageConfig.getConfig().getString("region.reload.bar")?.let {
+                        sender.getAudience().multiMessage(it)
+                    }
+                    return true
+                }
+
                 return true
             }
 
@@ -209,6 +225,8 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
         plugin.reloadConfig()
         plugin.messageConfig.reloadConfig()
         plugin.getRegionsConfig().reloadConfig()
+
+        plugin.reloadParseMode()
     }
 
 
@@ -219,7 +237,12 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
         "reload" to listOf("config", "bar")
     )
 
-    override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
+    override fun onTabComplete(
+        sender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<String>
+    ): List<String>? {
         if (args.size == 1) {
             return if (sender.hasPermission("lightshowregion.help")) completions["all"]
             else completions["forUser"]
@@ -233,7 +256,7 @@ class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
             }
         }
 
-        if(arg == "reload") {
+        if (arg == "reload") {
             if (args.size == 2 && sender.hasPermission("lightshowregion.reload.bar") || sender.hasPermission("lightshowregion.reload.config")) {
                 return completions["reload"]
             }

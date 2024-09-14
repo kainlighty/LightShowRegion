@@ -3,7 +3,9 @@ package ru.kainlight.lightshowregion.UTILS
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
 import ru.kainlight.lightlibrary.actionbar
+import ru.kainlight.lightlibrary.multiActionbar
 import ru.kainlight.lightshowregion.Main
+import ru.kainlight.lightshowregion.getAudience
 
 class ActionbarManager {
 
@@ -47,8 +49,10 @@ class ActionbarManager {
             val playerWorldName = player.world.name
             if (global.isNullOrEmpty() || disabledWorlds.contains(playerWorldName)) return@Runnable
 
-            val regionName = Main.INSTANCE.regionManager.sendRegionName(player)
-            player.actionbar(regionName)
+            Main.INSTANCE.regionManager.sendRegionName(player)?.let {
+                player.getAudience().multiActionbar(it)
+            }
+
         }, 0L, 20L))
     }
 }

@@ -6,23 +6,24 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import ru.kainlight.lightshowregion.Main
 
+@Suppress("WARNINGS")
 class RegionManager {
 
-    fun sendRegionName(player: Player?): String {
-        if (player == null) return ""
+    fun sendRegionName(player: Player?): String? {
+        if (player == null) return null
         val names: MutableList<String?> = ArrayList()
-        val msgs = Main.INSTANCE.messageConfig.getConfig()
+        val actionBarSection = Main.INSTANCE.messageConfig.getConfig().getConfigurationSection("actionbar")!!
 
         val hideGlobalRegion: Boolean = Main.INSTANCE.getConfig().getBoolean("region-settings.hide-global-region")
-        val globalBarMessage: String = msgs.getString("actionbar.global")!!
+        val globalBarMessage: String = actionBarSection.getString("global")!!
 
         val region: String = getRegion(player)
         if (region != "") {
             val regionCustomName: String? = getCustomRegionName(region)
             if (!regionCustomName.isNullOrEmpty()) {
                 val blacklist: List<String> = Main.INSTANCE.getConfig().getStringList("region-settings.blacklist")
-                val blacklistBarMessage: String = msgs.getString("actionbar.blacklisted")!!
-                val regionBarMessage: String = msgs.getString("actionbar.region")!!
+                val blacklistBarMessage: String = actionBarSection.getString("blacklisted")!!
+                val regionBarMessage: String = actionBarSection.getString("region")!!
 
                 if (blacklist.contains(region)) {
                     return blacklistBarMessage
@@ -41,10 +42,10 @@ class RegionManager {
     }
 
     private fun compareRegionPlayers(player: Player, regionName: String): String {
-        val msgs = Main.INSTANCE.messageConfig.getConfig()
+        val actionBarSection = Main.INSTANCE.messageConfig.getConfig().getConfigurationSection("actionbar")!!
 
-        val notYour: String = msgs.getString("actionbar.not-your")!!
-        val your: String = msgs.getString("actionbar.your")!!
+        val notYour: String = actionBarSection.getString("not-your")!!
+        val your: String = actionBarSection.getString("your")!!
 
         val regionOwner: String = getRegionOwner(player)
         val regionMembers: String = getRegionMembers(player)
