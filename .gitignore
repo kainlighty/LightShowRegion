@@ -47,3 +47,4 @@ bin/
 ./build
 ./gradle
 ./.kotlin
+/build/
