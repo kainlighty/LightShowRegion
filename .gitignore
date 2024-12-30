@@ -48,3 +48,4 @@ bin/
 ./gradle
 ./.kotlin
 /build/
+/.gradle/
