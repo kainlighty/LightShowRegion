@@ -1,4 +1,4 @@
-config-version: 1.4
+config-version: 1.5
 
 help:
   commands:
@@ -24,14 +24,18 @@ region:
   blacklist:
     added: "Region <red>%region% <white>has been <red>blacklisted<reset>"
     removed: "Region <red>%region% <white>was removed from the <red>blacklist<reset>"
-  global: "<green>Global region display changed<reset>"
+  global: "<green>Global region display changed on %value%<reset>"
   reload:
     config: "<green>Configurations reloaded<reset>"
-    bar: "<green>ActionBar reloaded for all players<reset>"
+    bar: "<green>Actionbar reloaded for all players<reset>"
 
 actionbar:
   region: "<gold><bold>YOU ARE LOCATED IN THE REGION %region%</bold>"
   blacklisted: "<dark_red><bold>THIS REGION IS BLACKLISTED</bold>"
   global: "<yellow><bold>FREE TERRITORY</bold>"
-  your: "<green><bold>YOUR TERRITORY</bold>"
-  not-your: "<red><bold>OCCUPIED TERRITORY</bold>" # %owners% - region owner
+  # Additional placeholders are supported:
+  # 1. %region% — Name of the region
+  # 2. %owners% — List of owners
+  your: "<green><bold>YOUR REGION</bold>"
+  # Additional placeholders are supported.
+  not-your: "<red><bold>OCCUPIED REGION</bold>"

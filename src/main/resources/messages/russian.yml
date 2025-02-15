@@ -1,4 +1,4 @@
-config-version: 1.4
+config-version: 1.5
 
 help:
   commands:
@@ -24,14 +24,18 @@ region:
   blacklist:
     added: "Регион <red>%region% <white>был добавлен в <red>черный список<reset>"
     removed: "Регион <red>%region% <white>был удалён из <red>черного списка<reset>"
-  global: "<green>Отображение глобального региона изменено<reset>"
+  global: "<green>Отображение глобального региона изменено на %value%<reset>"
   reload:
     config: "<green>Конфигурация успешно перезагружена<reset>"
-    bar: "<yellow>ActionBar успешно перезагружен у всех игроков<reset>"
+    bar: "<yellow>Actionbar успешно перезагружен у всех игроков<reset>"
 
 actionbar:
   region: "<gold><bold>ВЫ НАХОДИТЕСЬ В РЕГИОНЕ %region%</bold><reset>"
   blacklisted: "<dark_red><bold>РЕГИОН ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК</bold><reset>"
   global: "<yellow><bold>СВОБОДНАЯ ТЕРРИТОРИЯ</bold><reset>"
+  # Поддерживаются дополнительные плейсхолдеры:
+  # 1. %region% — Название региона
+  # 2. %owners% — Список владельцев
   your: "<green><bold>ВАША ТЕРРИТОРИЯ</bold><reset>"
-  not-your: "<red><bold>ЗАНЯТАЯ ТЕРРИТОРИЯ</bold><reset>" # %owners% - владелец региона
+  # Поддерживаются дополнительные плейсхолдеры.
+  not-your: "<red><bold>ЗАНЯТАЯ ТЕРРИТОРИЯ</bold><reset>"

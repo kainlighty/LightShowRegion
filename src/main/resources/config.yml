@@ -1,5 +1,7 @@
-config-version: 1.4
+config-version: 1.5
+
 update-notification: true
+debug: false
 
 main-settings:
   # MINIMESSAGE Example: <red>Hello

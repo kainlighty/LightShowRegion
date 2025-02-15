@@ -1,84 +1,87 @@
 package ru.kainlight.lightshowregion
 
 import me.clip.placeholderapi.PlaceholderAPI
-import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.platform.bukkit.BukkitAudiences
-import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import ru.kainlight.lightlibrary.LightConfig
 import ru.kainlight.lightlibrary.LightPlugin
-import ru.kainlight.lightlibrary.UTILS.Init
+import ru.kainlight.lightlibrary.UTILS.DebugBukkit
 import ru.kainlight.lightlibrary.UTILS.Parser
 import ru.kainlight.lightshowregion.COMMANDS.LSRCommand
 import ru.kainlight.lightshowregion.HOOKS.PAPIExtension
 import ru.kainlight.lightshowregion.LISTENERS.PlayerListener
-import ru.kainlight.lightshowregion.UTILS.ActionbarManager
-import ru.kainlight.lightshowregion.UTILS.RegionManager
 
 class Main : LightPlugin() {
-    companion object { lateinit var INSTANCE: Main }
 
-    lateinit var bukkitAudiences: BukkitAudiences
-
-    private var regionsConfig: LightConfig? = null
-    val actionbarManager: ActionbarManager = ActionbarManager()
-    val regionManager: RegionManager = RegionManager()
+    internal lateinit var regionsConfig: LightConfig
 
     override fun onLoad() {
         this.saveDefaultConfig()
+        configurationVersion = 1.5
+        this.updateConfig()
+
         LightConfig.saveLanguages(this, "main-settings.lang")
+        messageConfig.configurationVersion = 1.5
+        this.messageConfig.updateConfig()
+
+        regionsConfig = LightConfig(this, null,"regions.yml")
     }
 
     override fun onEnable() {
-        INSTANCE = this
+        instance = this
+        setLightPluginInstance()
 
-        configurationVersion = 1.4
-        messageConfig.configurationVersion = 1.4
+        this.reloadConfigs()
 
-        this.updateConfig()
-        this.messageConfig.updateConfig()
-        regionsConfig = LightConfig(this, null,"regions.yml")
-
-        this.reloadParseMode()
-
-        this.bukkitAudiences = BukkitAudiences.create(this)
+        createBukkitAudience()
 
         registerCommand("lightshowregion", LSRCommand(this))
-        registerListener(PlayerListener(this))
-        this.registerPlaceholders()
+        registerListener(PlayerListener())
 
-        Init.start(this, true)
+        this.registerPlaceholder()
+
+        checkUpdates()
+        enableMessage()
     }
 
     override fun onDisable() {
-        this.unregisterPlaceholders()
-        this.server.scheduler.cancelTasks(this)
+        unregisterListeners()
+        this.unregisterPlaceholder()
     }
 
-    private fun registerPlaceholders() {
-        if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && ! PlaceholderAPI.isRegistered(this.description.name.lowercase())) {
-            PAPIExtension(this).register()
+    fun reloadConfigs() {
+        this.saveDefaultConfig()
+        this.reloadConfig()
+        Parser.parseMode = this.config.getString("main-settings.parse_mode") ?: "MINIMESSAGE"
+        DebugBukkit.isEnabled = this.config.getBoolean("debug")
+
+        this.messageConfig.saveDefaultConfig()
+        this.messageConfig.reloadLanguage("main-settings.lang")
+        this.messageConfig.reloadConfig()
+
+        this.regionsConfig.saveDefaultConfig()
+        this.regionsConfig.reloadConfig()
+    }
+
+    private fun registerPlaceholder() {
+        val description = this.description
+        if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && ! PlaceholderAPI.isRegistered(description.name.lowercase())) {
+            PAPIExtension(description).register()
         }
     }
 
-    private fun unregisterPlaceholders() {
-        try {
-            if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(this.description.name.lowercase())) {
-                PAPIExtension(this).unregister()
+    private fun unregisterPlaceholder() {
+        runCatching {
+            val description = this.description
+            if (this.server.pluginManager.isPluginEnabled("PlaceholderAPI") && PlaceholderAPI.isRegistered(description.name.lowercase())) {
+                PAPIExtension(description).unregister()
             }
-        } catch (_: Exception) {}
+        }
     }
 
-    fun getRegionsConfig(): LightConfig { return regionsConfig!! }
+    companion object {
+        private lateinit var instance: Main
 
-    fun reloadParseMode() {
-        Parser.parseMode = this.config.getString("main-settings.parse_mode", "MINIMESSAGE")!!
+        internal fun getInstance(): Main {
+            return instance
+        }
     }
-}
-
-fun Player.getAudience(): Audience {
-    return Main.INSTANCE.bukkitAudiences.player(this)
-}
-fun CommandSender.getAudience(): Audience {
-    return Main.INSTANCE.bukkitAudiences.sender(this)
 }
