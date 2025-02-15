@@ -7,7 +7,7 @@ authors: [ kainlight ]
 description: Show regions in the actionbar
 website: vk.com/kainlight
 
-softdepend: [ PlaceholderAPI ]
+depend: [ PlaceholderAPI ]
 loadbefore: [ PlaceholderAPI ]
 
 libraries:
