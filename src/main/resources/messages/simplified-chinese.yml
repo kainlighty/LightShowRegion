@@ -1,0 +1,41 @@
+config-version: 1.5
+
+help:
+  commands:
+    - '<white><st>   </st> <red><bold> LIGHTSHOWREGION 命令列表 </bold><white><st>   </st><reset>'
+    - '<red><bold> » </bold><white>/lsr add <区域名称> <名称><reset>'
+    - '<red><bold> » </bold><white>/lsr remove <区域名称><reset>'
+    - '<red><bold> » </bold><white>/lsr blacklist add <区域名称><reset>'
+    - '<red><bold> » </bold><white>/lsr blacklist remove <区域名称><reset>'
+    - '<red><bold> » </bold><white>/lsr global'
+    - '<red><bold> » </bold><white>/lsr reload <config|bar><reset>'
+  add: "<red><bold> » </bold><white>输入区域名称与想要的显示名称<reset>"
+  remove: "<red><bold> » </bold><white>输入区域名称<reset>"
+  blacklist:
+    add: "<red><bold> » </bold><white>输入区域名称<reset>"
+    remove: "<red><bold> » </bold><white>输入区域名称<reset>"
+  reload: "<red><bold> » </bold><white>选择重载的内容: <yellow>配置文件</yellow> 或 <yellow>Actionbar<reset>"
+
+region:
+  added: "已为区域 <red>%region% <white>添加显示名称 %name%<reset>"
+  removed: "已移除区域 <red>%region% <white>的显示名称<reset>"
+  exists: "区域 <red>%region% <white>已存在<reset>"
+  notFound: "没有找到名为 <red>%region% <white>的区域<reset>"
+  blacklist:
+    added: "区域 <red>%region% <white>已被添加至<red>黑名单<reset>"
+    removed: "区域 <red>%region% <white> 已从<red>黑名</red>单移出<reset>"
+  global: "<green>全局区域显示状态已切换为 %value%<reset>"
+  reload:
+    config: "<green>配置已重载<reset>"
+    bar: "<green>Actionbar 配置已为所有玩家重置<reset>"
+
+actionbar:
+  region: "<gold><bold>你正位于区域 %region%</bold>"
+  blacklisted: "<dark_red><bold>该区域处于黑名单</bold>"
+  global: "<yellow><bold>自由领土</bold>"
+  # 支持填入的内建变量:
+  # 1. %region% — 区域名称
+  # 2. %owners% — 拥有者列表
+  your: "<green><bold>你的区域</bold>"
+  # 支持填入的内建变量.
+  not-your: "<red><bold>被占领区</bold>"
