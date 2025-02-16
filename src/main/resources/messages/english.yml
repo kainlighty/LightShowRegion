@@ -7,24 +7,24 @@ help:
     - '<red><bold> » </bold><white>/lsr remove <region><reset>'
     - '<red><bold> » </bold><white>/lsr blacklist add <region><reset>'
     - '<red><bold> » </bold><white>/lsr blacklist remove <region><reset>'
-    - '<red><bold> » </bold><white>/lsr global'
+    - '<red><bold> » </bold><white>/lsr global<reset>'
     - '<red><bold> » </bold><white>/lsr reload <config|bar><reset>'
   add: "<red><bold> » </bold><white>Enter the region and the desired name<reset>"
   remove: "<red><bold> » </bold><white>Enter the name of the region<reset>"
   blacklist:
     add: "<red><bold> » </bold><white>Enter the name of the region<reset>"
     remove: "<red><bold> » </bold><white>Enter the name of the region<reset>"
-  reload: "<red><bold> » </bold><white>Choose which to reload: <yellow>config</yellow> or <yellow>actionbar<reset>"
+  reload: "<red><bold> » </bold><white>Choose which to reload: <yellow>config</yellow> or <yellow>actionbar</yellow><reset>"
 
 region:
-  added: "Region <red>%region% <white>added with name %name%<reset>"
-  removed: "Region <red>%region% <white>removed<reset>"
-  exists: "Region <red>%region% <white>already exists<reset>"
-  notFound: "Region <red>%region% <white>not found<reset>"
+  added: "Region <red>%region%<white> added with name %name%<reset>"
+  removed: "Region <red>%region%<white> removed<reset>"
+  exists: "Region <red>%region%<white> already exists<reset>"
+  notFound: "Region <red>%region%<white> not found<reset>"
   blacklist:
-    added: "Region <red>%region% <white>has been <red>blacklisted<reset>"
-    removed: "Region <red>%region% <white>was removed from the <red>blacklist<reset>"
-  global: "<green>Global region display changed on %value%<reset>"
+    added: "Region <red>%region%<white> has been <red>blacklisted<reset>"
+    removed: "Region <red>%region%<white> was removed from the <red>blacklist<reset>"
+  global: "<green>Global region display changed to %value%<reset>"
   reload:
     config: "<green>Configurations reloaded<reset>"
     bar: "<green>Actionbar reloaded for all players<reset>"
@@ -37,5 +37,4 @@ actionbar:
   # 1. %region% — Name of the region
   # 2. %owners% — List of owners
   your: "<green><bold>YOUR REGION</bold>"
-  # Additional placeholders are supported.
   not-your: "<red><bold>OCCUPIED REGION</bold>"
