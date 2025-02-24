@@ -15,6 +15,8 @@
 
 [![](https://i.ytimg.com/vi/dmJR8MlWudw/maxresdefault.jpg)](https://www.youtube.com/watch?v=dmJR8MlWudw)
 
+---
+
 ### › Commands and Permissions
 
 | Command                                            | Description                                         | Permission                       |
