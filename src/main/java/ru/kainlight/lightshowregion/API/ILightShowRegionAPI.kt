@@ -109,7 +109,7 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
     }
 
     override fun toString(): String {
-        return "LightShowRegionAPI(showedPlayers=$showedPlayers, regionHandler=$regionHandler, isGlobalRegion=${isGlobalRegion()}, disabledWorlds=${getDisabledWorlds()})"
+        return "LightShowRegionAPI(showedPlayers=$showedPlayers, regionHandler=$regionHandler, disabledWorlds=${getDisabledWorlds()})"
     }
 
 

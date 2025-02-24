@@ -123,6 +123,6 @@ internal class IRegionHandler(private val plugin: Main) : RegionHandler {
     private fun getCustomRegionNameFromConfig(regionName: String): String? = plugin.regionsConfig.getConfig().getString("custom.$regionName")
 
     override fun toString(): String {
-        return "RegionHandler(customRegionIds=${getCustomRegionIds()}, blacklist=${getBlacklist()})"
+        return "RegionHandler(customRegion=${getCustomRegionIds()}, blacklist=${getBlacklist()}, isGlobalRegion=${isGlobalRegion()})"
     }
 }
