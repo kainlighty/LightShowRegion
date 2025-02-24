@@ -4,11 +4,12 @@ main: ru.kainlight.lightshowregion.Main
 api-version: 1.17
 
 authors: [ kainlight ]
-description: Show regions in the actionbar
+description: ${description}
 website: vk.com/kainlight
 
-depend: [ PlaceholderAPI ]
-loadbefore: [ PlaceholderAPI ]
+depend: [ WorldGuard ]
+softdepend: [ PlaceholderAPI ]
+loadbefore: [ WorldGuard, PlaceholderAPI ]
 
 libraries:
   - net.kyori:adventure-api:${adventureVersion}
@@ -22,7 +23,7 @@ commands:
       - lsr
 
 permissions:
-  lightshowregion.see:
+  lightshowregion.toggle:
     default: true
   lightshowregion.help:
     default: op
@@ -43,17 +44,21 @@ permissions:
       lightshowregion.blacklist.remove: true
   lightshowregion.reload.config:
     default: op
-  lightshowregion.reload.bar:
+  lightshowregion.reload.actionbar:
+    default: op
+  lightshowregion.reload.bossbar:
+    default: op
+  lightshowregion.reload.bars:
     default: op
   lightshowregion.reload.*:
     default: op
     children:
       lightshowregion.reload.config: true
-      lightshowregion.reload.bar: true
+      lightshowregion.reload.bars.*: true
   lightshowregion.*:
     default: op
     children:
-      lightshowregion.see: true
+      lightshowregion.toggle: true
       lightshowregion.help: true
       lightshowregion.global: true
       lightshowregion.add: true

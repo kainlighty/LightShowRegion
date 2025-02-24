@@ -1,40 +1,45 @@
-config-version: 1.5
+config-version: 1.6
+
+no-permissions: "<red><bold> » </bold><white>You do not have enough permission %permission% to perform this command<reset>"
 
 help:
   commands:
     - '<white><st>   </st> <red><bold> LIGHTSHOWREGION HELP </bold><white><st>   </st><reset>'
-    - '<red><bold> » </bold><white>/lsr add <region> <name><reset>'
-    - '<red><bold> » </bold><white>/lsr remove <region><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist add <region><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist remove <region><reset>'
-    - '<red><bold> » </bold><white>/lsr global<reset>'
-    - '<red><bold> » </bold><white>/lsr reload <config|bar><reset>'
-  add: "<red><bold> » </bold><white>Enter the region and the desired name<reset>"
+    - '<red><bold> » </bold><white>/lsr toggle (<actionbar/bossbar>) <gray>— <reset>Toggle region display'
+    - '<red><bold> » </bold><white>/lsr add <yellow><region> <name> <gray>— <reset>Add a custom name for the region'
+    - '<red><bold> » </bold><white>/lsr remove <yellow><region> <gray>— <reset>Remove the custom name of the region'
+    - '<red><bold> » </bold><white>/lsr blacklist add <yellow><region> <gray>— <reset>Add the region to the blacklist'
+    - '<red><bold> » </bold><white>/lsr blacklist remove <yellow><region> <gray>— <reset>Remove the region from the blacklist'
+    - '<red><bold> » </bold><white>/lsr global <gray>— <reset>Toggle global region display'
+    - '<red><bold> » </bold><white>/lsr reload <yellow><config/bar> <gray>— <reset>Reload configurations or Actionbar'
+  add: "<red><bold> » </bold><white>Enter the region and its custom name<reset>"
   remove: "<red><bold> » </bold><white>Enter the name of the region<reset>"
   blacklist:
     add: "<red><bold> » </bold><white>Enter the name of the region<reset>"
     remove: "<red><bold> » </bold><white>Enter the name of the region<reset>"
-  reload: "<red><bold> » </bold><white>Choose which to reload: <yellow>config</yellow> or <yellow>actionbar</yellow><reset>"
+  reload: "<red><bold> » </bold><white>Choose what to reload: <yellow>config</yellow> or <yellow>actionbar<reset>"
 
 region:
-  added: "Region <red>%region%<white> added with name %name%<reset>"
-  removed: "Region <red>%region%<white> removed<reset>"
-  exists: "Region <red>%region%<white> already exists<reset>"
-  notFound: "Region <red>%region%<white> not found<reset>"
+  added: "Region <red>%region% <white>added with name %name%<reset>"
+  removed: "Region <red>%region% <white>removed<reset>"
+  exists: "Region <red>%region% <white>already exists<reset>"
+  notFound: "Region <red>%region% <white>not found<reset>"
   blacklist:
-    added: "Region <red>%region%<white> has been <red>blacklisted<reset>"
-    removed: "Region <red>%region%<white> was removed from the <red>blacklist<reset>"
-  global: "<green>Global region display changed to %value%<reset>"
+    added: "Region <red>%region% <white>has been added to the <red>blacklist<reset>"
+    removed: "Region <red>%region% <white>has been removed from the <red>blacklist<reset>"
+  global: "<green>Global region display changed"
   reload:
-    config: "<green>Configurations reloaded<reset>"
-    bar: "<green>Actionbar reloaded for all players<reset>"
+    config: "<green>Configuration successfully reloaded<reset>"
+    actionbar: "<yellow>Actionbar successfully reloaded for all players<reset>"
+    bossbar: "<yellow>Bossbar successfully reloaded for all players<reset>"
 
-actionbar:
-  region: "<gold><bold>YOU ARE LOCATED IN THE REGION %region%</bold>"
-  blacklisted: "<dark_red><bold>THIS REGION IS BLACKLISTED</bold>"
-  global: "<yellow><bold>FREE TERRITORY</bold>"
+bar:
+  region: "<gold><bold>YOU ARE LOCATED IN THE REGION %region%</bold><reset>"
+  blacklisted: "<dark_red><bold>REGION %region% IS BLACKLISTED</bold><reset>"
+  global: "<yellow><bold>FREE TERRITORY</bold><reset>"
   # Additional placeholders are supported:
   # 1. %region% — Name of the region
   # 2. %owners% — List of owners
-  your: "<green><bold>YOUR REGION</bold>"
-  not-your: "<red><bold>OCCUPIED REGION</bold>"
+  your: "<green><bold>YOUR TERRITORY | %region%</bold><reset>"
+  # Additional placeholders are supported.
+  not-your: "<red><bold>OCCUPIED TERRITORY %region% | %owners%</bold><reset>"

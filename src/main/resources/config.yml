@@ -1,18 +1,30 @@
-config-version: 1.5
+config-version: 1.6
 
 update-notification: true
 debug: false
 
 main-settings:
-  # MINIMESSAGE Example: <red>Hello
-  # LEGACY Example: &cHello
-  parse_mode: "MINIMESSAGE" # MINIMESSAGE or LEGACY
-  lang: ENGLISH # RUSSIAN or ENGLISH
+  # Modes: MINIMESSAGE or LEGACY
+  # - `MINIMESSAGE` Example: <red>Hello.
+  # - `LEGACY` Example: &cHello.
+  parse_mode: MINIMESSAGE
+  # RUSSIAN, ENGLISH or SIMPLIFIED-CHINESE.
+  lang: ENGLISH
   actionbar: true
+  bossbar: false
 
 region-settings:
-  hide-global-region: false
+  # HIGHEST, LOWEST, RANDOM.
+  # RANDOM — If there are several regions in a location, the label will switch between them.
+  sorted-by: RANDOM
+  global-region: true
   disabled-worlds:
     - test
   blacklist:
     - test
+
+bossbar-settings:
+  # PINK, BLUE, GREEN, YELLOW, PURPLE, WHITE, RED.
+  color: RED
+  # SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20.
+  style: PROGRESS

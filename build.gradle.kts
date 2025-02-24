@@ -4,12 +4,12 @@ plugins {
     id("java")
     kotlin("jvm") version "2.1.10"
 
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("com.gradleup.shadow").version("9.0.0-beta7")
 }
 
 group = "ru.kainlight.lightshowregion"
-version = "1.4.1.2"
+version = "1.4.2"
+description = "Show regions in the actionbar"
 
 val kotlinVersion = "2.1.10"
 val papiVersion = "2.11.6"
@@ -22,12 +22,15 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io/")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(project(":API"))
 
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
 
     compileOnly("me.clip:placeholderapi:$papiVersion")
 
@@ -40,18 +43,19 @@ dependencies {
     ))
 }
 
-val javaVersion = 17
+val javaVersion = JavaLanguageVersion.of(17)
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion))
+    toolchain.languageVersion.set(javaVersion)
 }
 kotlin {
-    jvmToolchain(javaVersion)
+    jvmToolchain { javaVersion }
 }
 
 tasks {
     processResources {
         val props = mapOf(
             "pluginVersion" to version,
+            "description" to description,
             "kotlinVersion" to kotlinVersion,
             "adventureVersion" to adventureVersion,
             "adventureBukkitVersion" to adventureBukkitVersion

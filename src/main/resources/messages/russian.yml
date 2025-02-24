@@ -1,20 +1,23 @@
-config-version: 1.5
+config-version: 1.6
+
+no-permissions: "<red><bold> » </bold><white>У вас недостаточно права %permission% для выполнения этой команды<reset>"
 
 help:
   commands:
     - '<white><st>   </st> <red><bold> LIGHTSHOWREGION HELP </bold><white><st>   </st><reset>'
-    - '<red><bold> » </bold><white>/lsr add <region> <name><reset>'
-    - '<red><bold> » </bold><white>/lsr remove <region><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist add <region><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist remove <region><reset>'
-    - '<red><bold> » </bold><white>/lsr global<reset>'
-    - '<red><bold> » </bold><white>/lsr reload <config|bar><reset>'
-  add: "<red><bold> » </bold><white>Введите регион и желаемое название<reset>"
+    - '<red><bold> » </bold><white>/lsr toggle (<actionbar/bossbar>) <gray>— <reset>Переключить отображение региона'
+    - '<red><bold> » </bold><white>/lsr add <yellow><region> <name> <gray>— <reset>Добавить кастомное название для региона'
+    - '<red><bold> » </bold><white>/lsr remove <yellow><region> <gray>— <reset>Удалить кастомное название региона'
+    - '<red><bold> » </bold><white>/lsr blacklist add <yellow><region> <gray>— <reset>Добавить регион в чёрный список'
+    - '<red><bold> » </bold><white>/lsr blacklist remove <yellow><region> <gray>— <reset>Удалить регион из чёрного списка'
+    - '<red><bold> » </bold><white>/lsr global <gray>— <reset>Переключить отображение глобального региона'
+    - '<red><bold> » </bold><white>/lsr reload <yellow><config/bar> <gray>— <reset>Перезагрузить конфигурации или Actionbar'
+  add: "<red><bold> » </bold><white>Введите регион и его кастомное название<reset>"
   remove: "<red><bold> » </bold><white>Введите название региона<reset>"
   blacklist:
     add: "<red><bold> » </bold><white>Введите название региона<reset>"
     remove: "<red><bold> » </bold><white>Введите название региона<reset>"
-  reload: "<red><bold> » </bold><white>Выберите что перезагрузить: <yellow>config</yellow> или <yellow>actionbar<reset>"
+  reload: "<red><bold> » </bold><white>Выберите, что перезагрузить: <yellow>config</yellow> или <yellow>actionbar<reset>"
 
 region:
   added: "Регион <red>%region% <white>добавлен с именем %name%<reset>"
@@ -24,18 +27,19 @@ region:
   blacklist:
     added: "Регион <red>%region% <white>был добавлен в <red>черный список<reset>"
     removed: "Регион <red>%region% <white>был удалён из <red>черного списка<reset>"
-  global: "<green>Отображение глобального региона изменено на %value%<reset>"
+  global: "<green>Отображение глобального региона изменено"
   reload:
     config: "<green>Конфигурация успешно перезагружена<reset>"
-    bar: "<yellow>Actionbar успешно перезагружен у всех игроков<reset>"
+    actionbar: "<yellow>Actionbar успешно перезагружен у всех игроков<reset>"
+    bossbar: "<yellow>Bossbar успешно перезагружен у всех игроков<reset>"
 
-actionbar:
+bar:
   region: "<gold><bold>ВЫ НАХОДИТЕСЬ В РЕГИОНЕ %region%</bold><reset>"
-  blacklisted: "<dark_red><bold>РЕГИОН ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК</bold><reset>"
+  blacklisted: "<dark_red><bold>РЕГИОН %region% ЗАНЕСЕН В ЧЕРНЫЙ СПИСОК</bold><reset>"
   global: "<yellow><bold>СВОБОДНАЯ ТЕРРИТОРИЯ</bold><reset>"
   # Поддерживаются дополнительные плейсхолдеры:
   # 1. %region% — Название региона
   # 2. %owners% — Список владельцев
-  your: "<green><bold>ВАША ТЕРРИТОРИЯ</bold><reset>"
+  your: "<green><bold>ВАША ТЕРРИТОРИЯ | %region%</bold><reset>"
   # Поддерживаются дополнительные плейсхолдеры.
-  not-your: "<red><bold>ЗАНЯТАЯ ТЕРРИТОРИЯ</bold><reset>"
+  not-your: "<red><bold>ЗАНЯТЫЙ РЕГИОН %region% | %owners%</bold><reset>"

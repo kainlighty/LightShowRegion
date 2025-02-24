@@ -1,14 +1,17 @@
-config-version: 1.5
+config-version: 1.6
+
+no-permissions: "<red><bold> » </bold><white>你没有权限 %permission% 执行此命令<reset>"
 
 help:
   commands:
     - '<white><st>   </st> <red><bold> LIGHTSHOWREGION 命令列表 </bold><white><st>   </st><reset>'
-    - '<red><bold> » </bold><white>/lsr add <区域名称> <名称><reset>'
-    - '<red><bold> » </bold><white>/lsr remove <区域名称><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist add <区域名称><reset>'
-    - '<red><bold> » </bold><white>/lsr blacklist remove <区域名称><reset>'
-    - '<red><bold> » </bold><white>/lsr global<reset>'
-    - '<red><bold> » </bold><white>/lsr reload <config|bar><reset>'
+    - '<red><bold> » </bold><white>/lsr toggle (<actionbar/bossbar>) <gray>— <reset>切换区域显示'
+    - '<red><bold> » </bold><white>/lsr add <yellow><区域名称> <名称> <gray>— <reset>为区域添加自定义名称'
+    - '<red><bold> » </bold><white>/lsr remove <yellow><区域名称> <gray>— <reset>移除区域的自定义名称'
+    - '<red><bold> » </bold><white>/lsr blacklist add <yellow><区域名称> <gray>— <reset>将区域添加到黑名单'
+    - '<red><bold> » </bold><white>/lsr blacklist remove <yellow><区域名称> <gray>— <reset>从黑名单中移除区域'
+    - '<red><bold> » </bold><white>/lsr global <gray>— <reset>切换全局区域显示'
+    - '<red><bold> » </bold><white>/lsr reload <yellow><config/bar> <gray>— <reset>重载配置或Actionbar'
   add: "<red><bold> » </bold><white>输入区域名称与想要的显示名称<reset>"
   remove: "<red><bold> » </bold><white>输入区域名称<reset>"
   blacklist:
@@ -22,14 +25,15 @@ region:
   exists: "区域 <red>%region% <white>已存在<reset>"
   notFound: "没有找到名为 <red>%region% <white>的区域<reset>"
   blacklist:
-    added: "区域 <red>%region% <white>已被添加至 <red>黑名单<reset>"
+    added: "区域 <red>%region% <white>已被添加至 <red>黑名单<reset>"s
     removed: "区域 <red>%region% <white> 已从 <red>黑名单</red> 移出<reset>"
-  global: "<green>全局区域显示状态已切换为 %value%<reset>"
+  global: "<green>全局区域显示已更改<reset>"
   reload:
     config: "<green>配置已重载<reset>"
-    bar: "<green>Actionbar 配置已为所有玩家重置<reset>"
+    actionbar: "<yellow>Actionbar已为所有玩家重载<reset>"
+    bossbar: "<yellow>Bossbar已为所有玩家重载<reset>"
 
-actionbar:
+bar:
   region: "<gold><bold>你正位于区域 %region%</bold>"
   blacklisted: "<dark_red><bold>该区域处于黑名单</bold>"
   global: "<yellow><bold>自由领土</bold>"
