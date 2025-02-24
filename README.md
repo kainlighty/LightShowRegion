@@ -15,19 +15,19 @@
 
 [![](https://i.ytimg.com/vi/dmJR8MlWudw/maxresdefault.jpg)](https://www.youtube.com/watch?v=dmJR8MlWudw)
 
-| Command                                        | Description                                            | Permission                       |
-|------------------------------------------------|--------------------------------------------------------|----------------------------------|
-| lightshowregion / lsr                          | Help by commands                                       | lightshowregion.help             |
-| lightshowregion toggle (<actionbar>/<bossbar>) | Switch the region display                              | lightshowregion.toggle           |
-| lightshowregion add \<region> \<custom name>   | Add a custom name to a region                          | lightshowregion.add              |
-| lightshowregion remove \<region>               | Remove custom name                                     | lightshowregion.remove           |
-| lightshowregion blacklist add \<region>        | Add a region to the blacklist                          | lightshowregion.blacklist.add    |
-| lightshowregion blacklist remove \<region>     | Remove a region to the blacklist                       | lightshowregion.blacklist.remove |
-| lightshowregion global                         | Hide actionbar in _global_ region                      | lightshowregion.global           |
-| lightshowregion reload actionbar               | Reload actionbar for all online players                | lightshowregion.reload.actionbar |
-| lightshowregion reload bossbar                 | Reload bossbar for all online players                  | lightshowregion.reload.bossbar   |
-| lightshowregion reload bars                    | Reload actionbar and bossbar for all online players    | lightshowregion.reload.bars      |
-| lightshowregion reload config                  | Reload all configurations                              | lightshowregion.reload.config    |
+| Command                                            | Description                                         | Permission                       |
+|----------------------------------------------------|-----------------------------------------------------|----------------------------------|
+| lightshowregion / lsr                              | Help by commands                                    | lightshowregion.help             |
+| lightshowregion toggle (\<actionbar>/\<bossbar>)   | Switch the region display                           | lightshowregion.toggle           |
+| lightshowregion add \<region> \<custom name>       | Add a custom name to a region                       | lightshowregion.add              |
+| lightshowregion remove \<region>                   | Remove custom name                                  | lightshowregion.remove           |
+| lightshowregion blacklist add \<region>            | Add a region to the blacklist                       | lightshowregion.blacklist.add    |
+| lightshowregion blacklist remove \<region>         | Remove a region to the blacklist                    | lightshowregion.blacklist.remove |
+| lightshowregion global                             | Switch the global region display                    | lightshowregion.global           |
+| lightshowregion reload actionbar                   | Reload actionbar for all online players             | lightshowregion.reload.actionbar |
+| lightshowregion reload bossbar                     | Reload bossbar for all online players               | lightshowregion.reload.bossbar   |
+| lightshowregion reload bars                        | Reload actionbar and bossbar for all online players | lightshowregion.reload.bars      |
+| lightshowregion reload config                      | Reload all configurations                           | lightshowregion.reload.config    |
 
 | Permissions without commands | Description                                      |
 |------------------------------|--------------------------------------------------|
