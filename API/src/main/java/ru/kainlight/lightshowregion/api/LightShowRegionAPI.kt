@@ -1,8 +1,8 @@
-package ru.kainlight.lightshowregion.API
+package ru.kainlight.lightshowregion.api
 
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.ApiStatus
-import ru.kainlight.lightshowregion.API.exceptions.ProviderException
+import ru.kainlight.lightshowregion.api.exceptions.ProviderException
 
 interface LightShowRegionAPI {
 

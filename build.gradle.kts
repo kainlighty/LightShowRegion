@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.kainlight.lightshowregion"
-version = "1.4.2"
+version = "1.4.2.1"
 description = "Show regions in the actionbar"
 
 val kotlinVersion = "2.1.10"
@@ -30,10 +30,9 @@ dependencies {
     implementation(project(":API"))
 
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
-
     compileOnly("me.clip:placeholderapi:$papiVersion")
-
     compileOnly("net.kyori:adventure-api:$adventureVersion")
     compileOnly("net.kyori:adventure-text-minimessage:$adventureVersion")
     compileOnly("net.kyori:adventure-platform-bukkit:$adventureBukkitVersion")
@@ -43,22 +42,29 @@ dependencies {
     ))
 }
 
-val javaVersion = JavaLanguageVersion.of(17)
+val javaLanguageVersion = JavaLanguageVersion.of(17)
 java {
-    toolchain.languageVersion.set(javaVersion)
+    toolchain.languageVersion.set(javaLanguageVersion)
 }
 kotlin {
-    jvmToolchain { javaVersion }
+    jvmToolchain { javaLanguageVersion }
 }
 
 tasks {
     processResources {
+        val libraries = listOf(
+            "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
+            "net.kyori:adventure-text-minimessage:${adventureVersion}",
+            "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}",
+            "net.kyori:adventure-text-minimessage:${adventureVersion}"
+        )
         val props = mapOf(
             "pluginVersion" to version,
             "description" to description,
             "kotlinVersion" to kotlinVersion,
             "adventureVersion" to adventureVersion,
-            "adventureBukkitVersion" to adventureBukkitVersion
+            "adventureBukkitVersion" to adventureBukkitVersion,
+            "libraries" to libraries
         )
         inputs.properties(props)
         filteringCharset = "UTF-8"
@@ -66,7 +72,7 @@ tasks {
             expand(props)
         }
     }
-
+    
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set(project.name)
         archiveFileName.set("${project.name}-${project.version}.jar")
@@ -80,7 +86,7 @@ tasks {
         mergeServiceFiles()
 
         // Переименование пакетов
-        val shadedPath = "ru.kainlight.lightshowregion.shaded"
+        val shadedPath = "ru.kainlight.${project.name.lowercase()}.shaded"
         relocate("ru.kainlight.lightlibrary", "$shadedPath.lightlibrary")
     }
 }

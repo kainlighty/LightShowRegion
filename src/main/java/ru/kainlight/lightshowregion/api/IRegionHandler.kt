@@ -1,4 +1,4 @@
-package ru.kainlight.lightshowregion.API
+package ru.kainlight.lightshowregion.api
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion
 import org.bukkit.Location
@@ -21,30 +21,36 @@ internal class IRegionHandler(private val plugin: Main) : RegionHandler {
     override fun getCustomRegionName(player: Player?): String? {
         if (player == null) return null
         val actionBarSection = plugin.getMessages().getConfigurationSection("bar")!!
-        val getSorts = plugin.config.getString("region-settings.sorted-by") ?: "RANDOM"
+        val sortBy = plugin.config.getString("region-settings.sorted-by") ?: "RANDOM"
 
-        val region = this.getRegionId(player.location, getSorts)
+        val region = this.getRegionId(player.location, sortBy)
         if (region == null) {
-            val globalRegion = plugin.config.getBoolean("region-settings.global-region")
-            if(globalRegion) {
-                return actionBarSection.getString("global")
+            val isGlobalRegion = this.isGlobalRegion()
+            if(isGlobalRegion) {
+                val globalRegionMessage = actionBarSection.getString("global") ?: return null
+                if(globalRegionMessage.isEmpty() || globalRegionMessage.isBlank()) return null
+                return globalRegionMessage
             }
             return null
         }
 
         val blacklist = this.getBlacklist()
         if (blacklist.contains(region)) {
-            return actionBarSection.getString("blacklisted")?.replace("%region%", region)
+            val actionbarMessage = actionBarSection.getString("blacklisted") ?: return null
+            if(actionbarMessage.isEmpty() || actionbarMessage.isBlank()) return null
+            return actionbarMessage.replace("%region%", region)
         }
 
         val regionCustomName = getCustomRegionNameFromConfig(region)
-        return if (!regionCustomName.isNullOrEmpty()) {
-            val regionBarMessage = actionBarSection.getString("region")
+        return if (regionCustomName != null) {
+            val regionBarMessage = actionBarSection.getString("region") ?: return null
 
             if (regionCustomName.startsWith("!")) regionCustomName.substring(1)
-            else regionBarMessage?.replace("%region%", regionCustomName)
+            else regionBarMessage.replace("%region%", regionCustomName)
         } else {
-            compareRegionPlayers(player, region)
+            val compareRegionPlayers = compareRegionPlayers(player, region)
+            if(compareRegionPlayers.isEmpty() || compareRegionPlayers.isBlank()) return null
+            compareRegionPlayers
         }
     }
 
@@ -120,7 +126,11 @@ internal class IRegionHandler(private val plugin: Main) : RegionHandler {
         }
     }
 
-    private fun getCustomRegionNameFromConfig(regionName: String): String? = plugin.regionsConfig.getConfig().getString("custom.$regionName")
+    private fun getCustomRegionNameFromConfig(regionName: String): String? {
+        val customRegionName = plugin.regionsConfig.getConfig().getString("custom.$regionName") ?: return null
+        if(customRegionName.isEmpty() || customRegionName.isBlank()) return null
+        return customRegionName
+    }
 
     override fun toString(): String {
         return "RegionHandler(customRegion=${getCustomRegionIds()}, blacklist=${getBlacklist()}, isGlobalRegion=${isGlobalRegion()})"

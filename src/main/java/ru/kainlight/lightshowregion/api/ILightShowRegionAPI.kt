@@ -1,17 +1,18 @@
-package ru.kainlight.lightshowregion.API
+package ru.kainlight.lightshowregion.api
 
 import org.bukkit.entity.Player
 import ru.kainlight.lightshowregion.Main
+import java.util.*
 
 @Suppress("UNUSED")
 internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAPI {
 
-    private val showedPlayers: MutableMap<Player, ShowedPlayer> = mutableMapOf()
+    private val showedPlayers: MutableMap<UUID, ShowedPlayer> = mutableMapOf()
     private val regionHandler: RegionHandler = IRegionHandler(plugin)
 
     override fun createShowedPlayer(player: Player): ShowedPlayer {
         val showedPlayer = IShowedPlayer(plugin, player)
-        showedPlayers.put(player, showedPlayer)
+        showedPlayers.put(player.uniqueId, showedPlayer)
         return showedPlayer
     }
 
@@ -20,7 +21,7 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
     }
 
     override fun deleteShowedPlayer(player: Player): Boolean {
-        return showedPlayers.remove(player) != null
+        return showedPlayers.remove(player.uniqueId) != null
     }
 
     override fun deleteShowedPlayer(showedPlayer: ShowedPlayer): Boolean {
@@ -28,7 +29,7 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
     }
 
     override fun getShowedPlayer(player: Player): ShowedPlayer? {
-        return showedPlayers.get(player)
+        return showedPlayers.get(player.uniqueId)
     }
 
     override fun getShowedPlayers(): List<ShowedPlayer> {
@@ -36,11 +37,11 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
     }
 
     override fun isShowedPlayer(player: Player?): Boolean {
-        return showedPlayers.keys.contains(player)
+        return if(player == null) false else showedPlayers.keys.contains(player.uniqueId)
     }
 
     override fun reloadActionbar(player: Player) {
-        this.getOrCreateShowedPlayer(player).actionbar.show()
+        this.getOrCreateShowedPlayer(player).getActionbar().show()
     }
 
     override fun reloadActionbars() {
@@ -51,12 +52,12 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
 
     override fun unloadActionbars() {
         showedPlayers.values.forEach {
-            it.actionbar.hide()
+            it.getActionbar().hide()
         }
     }
 
     override fun reloadBossbar(player: Player) {
-        this.getOrCreateShowedPlayer(player).bossbar.show()
+        this.getOrCreateShowedPlayer(player).getBossbar().show()
     }
 
     override fun reloadBossbars() {
@@ -67,7 +68,7 @@ internal class ILightShowRegionAPI(private val plugin: Main) : LightShowRegionAP
 
     override fun unloadBossbars() {
         showedPlayers.values.forEach {
-            it.bossbar.hide()
+            it.getBossbar().hide()
         }
     }
 

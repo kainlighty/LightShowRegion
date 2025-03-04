@@ -2,6 +2,7 @@ name: LightShowRegion
 version: ${pluginVersion}
 main: ru.kainlight.lightshowregion.Main
 api-version: 1.17
+folia-supported: true
 
 authors: [ kainlight ]
 description: ${description}
@@ -11,11 +12,7 @@ depend: [ WorldGuard ]
 softdepend: [ PlaceholderAPI ]
 loadbefore: [ WorldGuard, PlaceholderAPI ]
 
-libraries:
-  - net.kyori:adventure-api:${adventureVersion}
-  - net.kyori:adventure-text-minimessage:${adventureVersion}
-  - net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}
-  - org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}
+libraries: ${libraries}
 
 commands:
   lightshowregion:

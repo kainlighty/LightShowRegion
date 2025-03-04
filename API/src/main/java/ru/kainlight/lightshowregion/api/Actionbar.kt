@@ -1,4 +1,4 @@
-package ru.kainlight.lightshowregion.API
+package ru.kainlight.lightshowregion.api
 
 interface Actionbar {
 

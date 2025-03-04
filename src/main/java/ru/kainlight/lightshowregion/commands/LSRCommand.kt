@@ -1,4 +1,4 @@
-package ru.kainlight.lightshowregion.COMMANDS
+package ru.kainlight.lightshowregion.commands
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -6,15 +6,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import ru.kainlight.lightlibrary.*
 import ru.kainlight.lightlibrary.API.WorldGuardAPI
-import ru.kainlight.lightshowregion.API.LightShowRegionAPI
+import ru.kainlight.lightshowregion.api.LightShowRegionAPI
 import ru.kainlight.lightshowregion.Main
 
 internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         val senderAudience = sender.getAudience()
-
-        if (args.isEmpty()) return sender.sendHelp()
+        args.ifEmpty { return sender.sendHelp() }
 
         val helpSection = plugin.messageConfig.getConfig().getConfigurationSection("help")
         return when (args[0].lowercase()) {
@@ -29,8 +28,8 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
                     }
 
                     when(args[1].lowercase()) {
-                        "actionbar" -> showedPlayer.actionbar.toggle()
-                        "bossbar" -> showedPlayer.bossbar.toggle()
+                        "actionbar" -> showedPlayer.getActionbar().toggle()
+                        "bossbar" -> showedPlayer.getBossbar().toggle()
                         else -> return true
                     }
                 }
@@ -55,7 +54,6 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
                 }
 
                 val st = StringBuilder()
-
                 for (i in 2 until args.size) {
                     st.append(args[i]).append(" ")
                 }
@@ -68,7 +66,6 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
                         senderAudience.multiMessage(it.replace("%region%", region).replace("%name%", regionNameToConfig))
                     }
                 }
-
                 return true
             }
             "remove" -> {
@@ -117,7 +114,6 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
                                 senderAudience.multiMessage(it.replace("%region%", region))
                             }
                         }
-
                         return true
                     }
                     "remove" -> {
@@ -214,19 +210,12 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
         }
     }
 
-    private fun blacklistManage(blacklisted: MutableList<String>, region: String, action: String): String? {
-        plugin.config.set("region-settings.blacklist", blacklisted)
-        plugin.saveConfig()
-        plugin.reloadConfig()
-
-        return plugin.messageConfig.getConfig().getString("region.blacklist.$action")?.replace("%region%", region)
-    }
-
     private fun CommandSender.sendHelp(): Boolean {
-        if (! this.hasPermission("lightshowregion.help")) return true
-        plugin.messageConfig.getConfig().getStringList("help.commands").forEach {
+        if(this.hasPermission("lightshowregion.help")) {
+            plugin.messageConfig.getConfig().getStringList("help.commands").forEach {
                 this.getAudience().multiMessage(it)
             }
+        }
         return true
     }
 
@@ -292,27 +281,25 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
                 if(args[1].equalsIgnoreCase("remove")) {
                     if(!sender.hasLSRPermission("blacklist.remove", false)) return null
                     val blacklistRegions = LightShowRegionAPI.getProvider().getRegionHandler().getBlacklist()
-
-                    if(blacklistRegions.isNotEmpty()) completions.addAll(blacklistRegions)
-                    else completions.add("<name>")
+                    if(blacklistRegions.isNotEmpty()) completions.addAll(blacklistRegions) else completions.add("<name>")
                 }
             }
         }
 
-        return completions.distinct().filter { it.startsWithIgnoreCase(args.last()) }
+        return completions.filter { it.startsWithIgnoreCase(args.last()) }
     }
 
     private fun CommandSender.hasLSRPermission(permission: String, message: Boolean = true): Boolean {
         val perm = "lightshowregion.$permission"
-        if(this.hasPermission(perm)) return true
+        return if(this.hasPermission(perm)) true
         else {
             if(message) {
                 plugin.messageConfig.getConfig().getString("no-permissions")?.replace("%permission%", perm)?.let {
                     this.getAudience().multiMessage(it)
                 }
             }
+            false
         }
-        return false
     }
 
 }

@@ -4,16 +4,16 @@ import ru.kainlight.lightlibrary.LightConfig
 import ru.kainlight.lightlibrary.LightPlugin
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
 import ru.kainlight.lightlibrary.UTILS.Parser
-import ru.kainlight.lightshowregion.API.ILightShowRegionAPI
-import ru.kainlight.lightshowregion.API.LightShowRegionAPI
-import ru.kainlight.lightshowregion.COMMANDS.LSRCommand
-import ru.kainlight.lightshowregion.HOOKS.PAPIExtension
-import ru.kainlight.lightshowregion.LISTENERS.PlayerListener
+import ru.kainlight.lightshowregion.api.ILightShowRegionAPI
+import ru.kainlight.lightshowregion.api.LightShowRegionAPI
+import ru.kainlight.lightshowregion.commands.LSRCommand
+import ru.kainlight.lightshowregion.hooks.CustomPlaceholder
+import ru.kainlight.lightshowregion.listeners.PlayerListener
 
 class Main : LightPlugin() {
 
     internal lateinit var regionsConfig: LightConfig
-    private var papiExpansion: PAPIExtension? = null
+    private var papiExpansion: CustomPlaceholder? = null
 
     override fun onLoad() {
         this.saveDefaultConfig()
@@ -29,19 +29,18 @@ class Main : LightPlugin() {
     }
 
     override fun onEnable() {
-        instance = this
-        setLightPluginInstance()
-
-        LightShowRegionAPI.setProvider(ILightShowRegionAPI(this))
+        setLightPluginInstance(this)
 
         this.reloadConfigs()
+
+        LightShowRegionAPI.setProvider(ILightShowRegionAPI(this))
 
         createBukkitAudience()
 
         registerCommand("lightshowregion", LSRCommand(this))
         registerListener(PlayerListener())
 
-        papiExpansion = PAPIExtension(this)
+        papiExpansion = CustomPlaceholder(this)
         papiExpansion?.register()
 
         checkUpdates()
@@ -49,16 +48,12 @@ class Main : LightPlugin() {
     }
 
     override fun onDisable() {
-        LightShowRegionAPI.getProvider().getShowedPlayers().forEach {
-            it.hideAll()
-        }
-
-        try {
+        runCatching {
+            LightShowRegionAPI.getProvider().getShowedPlayers().forEach { it.hideAll() }
             papiExpansion?.unregister()
-        } catch (_: Exception) {}
-
-        LightShowRegionAPI.removeProvider()
-        unregisterListeners()
+            LightShowRegionAPI.removeProvider()
+            stop()
+        }
     }
 
     fun reloadConfigs() {
@@ -73,9 +68,5 @@ class Main : LightPlugin() {
 
         this.regionsConfig.saveDefaultConfig()
         this.regionsConfig.reloadConfig()
-    }
-
-    companion object {
-        private lateinit var instance: Main
     }
 }
