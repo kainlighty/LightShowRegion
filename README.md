@@ -48,15 +48,13 @@
 ### › [API](https://github.com/kainlighty/LightShowRegion/tree/master/API/src/main/java/ru/kainlight/lightshowregion/API)
 
 #### Maven:
-```
+```xml
 <dependency>
   <groupId>ru.kainlight.lightshowregion</groupId>
   <artifactId>api</artifactId>
   <version>CURRENT_VERSION</version>
   <scope>provided</scope>
 </dependency>
-
-> $ mvn install
 ```
 
 #### Gradle — Groovy DSL:
