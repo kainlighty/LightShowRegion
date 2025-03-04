@@ -52,7 +52,7 @@
 <dependency>
   <groupId>ru.kainlight.lightshowregion</groupId>
   <artifactId>api</artifactId>
-  <version>1.4.2</version>
+  <version>CURRENT_VERSION</version>
   <scope>provided</scope>
 </dependency>
 
@@ -70,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'ru.kainlight.lightshowregion:api:1.4.2'
+    compileOnly 'ru.kainlight.lightshowregion:api:CURRENT_VERSION'
 }
 ```
 #### Gradle — Kotlin DSL:
@@ -84,7 +84,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("ru.kainlight.lightshowregion:api:1.4.2")
+    compileOnly("ru.kainlight.lightshowregion:api:CURRENT_VERSION")
 }
 ```
 
