@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component
 import org.bukkit.scheduler.BukkitTask
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
 import ru.kainlight.lightlibrary.UTILS.Parser
-import ru.kainlight.lightlibrary.getAudience
 import ru.kainlight.lightshowregion.Main
 
 class IBossbar(private val plugin: Main,
@@ -25,7 +24,7 @@ class IBossbar(private val plugin: Main,
 
     override fun hide(): Boolean {
         val currentBar = bar ?: return false
-        showedPlayer.getPlayer().getAudience().hideBossBar(currentBar)
+        showedPlayer.getPlayer().hideBossBar(currentBar)
         val task = task ?: return false
         task.cancel()
 
@@ -43,7 +42,7 @@ class IBossbar(private val plugin: Main,
         createBar()
         this.isActive = true
         this.run()
-        showedPlayer.getPlayer().getAudience().showBossBar(bar!!)
+        showedPlayer.getPlayer().showBossBar(bar!!)
     }
 
     private fun createBar(): BossBar {

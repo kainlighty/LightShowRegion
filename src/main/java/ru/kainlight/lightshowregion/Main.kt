@@ -29,13 +29,11 @@ class Main : LightPlugin() {
     }
 
     override fun onEnable() {
-        setLightPluginInstance(this)
+        setLightPluginInstance()
 
         this.reloadConfigs()
 
         LightShowRegionAPI.setProvider(ILightShowRegionAPI(this))
-
-        createBukkitAudience()
 
         registerCommand("lightshowregion", LSRCommand(this))
         registerListener(PlayerListener())
@@ -52,7 +50,7 @@ class Main : LightPlugin() {
             LightShowRegionAPI.getProvider().getShowedPlayers().forEach { it.hideAll() }
             papiExpansion?.unregister()
             LightShowRegionAPI.removeProvider()
-            stop()
+
         }
     }
 

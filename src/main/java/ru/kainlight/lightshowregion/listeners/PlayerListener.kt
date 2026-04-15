@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
-import ru.kainlight.lightlibrary.ifFalse
 import ru.kainlight.lightshowregion.api.LightShowRegionAPI
 
 internal class PlayerListener : Listener {
@@ -19,7 +18,12 @@ internal class PlayerListener : Listener {
     private fun Player.active() {
         val api = LightShowRegionAPI.getProvider()
         api.getShowedPlayer(this)?.let { showedPlayer ->
-            showedPlayer.updatePlayer().ifFalse { DebugBukkit.warn("Player ${this.name} not updated. There may be problems!") }
+
+            val hasUpdated = showedPlayer.updatePlayer()
+
+            if(!hasUpdated) {
+                DebugBukkit.warn("Player ${this.name} not updated. There may be problems!")
+            }
 
             showedPlayer.getActionbar().takeIf { it.isActive }?.show()
             showedPlayer.getBossbar().takeIf { it.isActive }?.show()

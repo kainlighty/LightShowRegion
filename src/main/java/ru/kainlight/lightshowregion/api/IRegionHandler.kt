@@ -4,7 +4,6 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import ru.kainlight.lightlibrary.API.WorldGuardAPI
-import ru.kainlight.lightlibrary.remove
 import ru.kainlight.lightshowregion.Main
 import java.util.*
 
@@ -58,7 +57,7 @@ internal class IRegionHandler(private val plugin: Main) : RegionHandler {
         if (regionId == null) return false
         val customRegions = plugin.regionsConfig.getConfig().getConfigurationSection("custom")!!
         if (!customRegions.contains(regionId)) return false
-        customRegions.remove(regionId)
+        customRegions.set(regionId, null) // TODO: Ранее .remove, которого уже нет
         plugin.regionsConfig.saveConfig()
         return true
     }

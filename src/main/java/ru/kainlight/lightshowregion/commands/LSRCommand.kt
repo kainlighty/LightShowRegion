@@ -12,11 +12,11 @@ import ru.kainlight.lightshowregion.Main
 internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        val senderAudience = sender.getAudience()
+        val senderAudience = sender
         args.ifEmpty { return sender.sendHelp() }
 
         val helpSection = plugin.messageConfig.getConfig().getConfigurationSection("help")
-        return when (args[0].lowercase()) {
+        when (args[0].lowercase()) {
             "toggle" -> {
                 if(!sender.hasLSRPermission("toggle")) return true
 
@@ -213,7 +213,7 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
     private fun CommandSender.sendHelp(): Boolean {
         if(this.hasPermission("lightshowregion.help")) {
             plugin.messageConfig.getConfig().getStringList("help.commands").forEach {
-                this.getAudience().multiMessage(it)
+                this.multiMessage(it)
             }
         }
         return true
@@ -295,7 +295,7 @@ internal class LSRCommand(private var plugin: Main) : CommandExecutor, TabComple
         else {
             if(message) {
                 plugin.messageConfig.getConfig().getString("no-permissions")?.replace("%permission%", perm)?.let {
-                    this.getAudience().multiMessage(it)
+                    this.multiMessage(it)
                 }
             }
             false

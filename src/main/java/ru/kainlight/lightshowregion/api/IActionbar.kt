@@ -2,8 +2,6 @@ package ru.kainlight.lightshowregion.api
 
 import org.bukkit.scheduler.BukkitTask
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
-import ru.kainlight.lightlibrary.getAudience
-import ru.kainlight.lightlibrary.ifFalse
 import ru.kainlight.lightlibrary.multiActionbar
 import ru.kainlight.lightshowregion.Main
 
@@ -29,7 +27,7 @@ class IActionbar(private val plugin: Main,
     }
 
     override fun show() {
-        plugin.config.getBoolean("main-settings.actionbar").ifFalse { return }
+        if (!plugin.config.getBoolean("main-settings.actionbar")) return
         this.isActive = true
         run()
     }
@@ -42,15 +40,17 @@ class IActionbar(private val plugin: Main,
         DebugBukkit.info("Player ${player.name} actionbar showed")
 
         val task = plugin.runTaskTimerAsynchronously(Runnable {
-            player.isOnline.ifFalse {
+
+            if(!player.isOnline) {
                 DebugBukkit.info("Actionbar task cancelled for ${player.name} because player is offline")
                 hide()
                 return@Runnable
             }
+
             if (global.isNullOrEmpty() || disabledWorlds.contains(player.world.name)) return@Runnable
 
             val text = LightShowRegionAPI.getProvider().getRegionHandler().getCustomRegionName(player) ?: return@Runnable
-            player.getAudience().multiActionbar(text)
+            player.multiActionbar(text)
         }, 0L, 20L)
 
         this.task = task

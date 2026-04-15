@@ -2,25 +2,24 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("java")
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.3.10"
 
-    id("com.gradleup.shadow").version("9.0.0-beta7")
+    id("com.gradleup.shadow") version "9.4.1"
 }
 
 group = "ru.kainlight.lightshowregion"
-version = "1.4.2.1"
-description = "Show regions in the actionbar"
+version = "1.4.3"
+description = "Displaying the region in the ActionBar"
 
-val kotlinVersion = "2.1.10"
+val kotlinVersion = "2.3.10"
 val papiVersion = "2.11.6"
-val adventureVersion = "4.18.0"
-val adventureBukkitVersion = "4.3.4"
+val worldGuardVersion = "7.0.15"
 
 repositories {
     mavenCentral()
 
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.extendedclip.com/releases/")
     maven("https://jitpack.io/")
     maven("https://maven.enginehub.org/repo/")
 }
@@ -29,20 +28,20 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":API"))
 
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9")
-    compileOnly("me.clip:placeholderapi:$papiVersion")
-    compileOnly("net.kyori:adventure-api:$adventureVersion")
-    compileOnly("net.kyori:adventure-text-minimessage:$adventureVersion")
-    compileOnly("net.kyori:adventure-platform-bukkit:$adventureBukkitVersion")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:${worldGuardVersion}")
+//    compileOnly("me.clip:placeholderapi:$papiVersion")
+    compileOnly(files("C:/Users/kainlight/IdeaProjects/LightLibrary/bukkit/libs/placeholderapi-2.12.2.jar"))
+    //compileOnly("net.kyori:adventure-text-minimessage:$adventureVersion")
+
 
     implementation(files(
-        "C:/Users/danny/IdeaProjects/.Kotlin/.private/LightLibrary/bukkit/build/libs/LightLibraryBukkit-PUBLIC-1.0.jar"
+        "C:/Users/kainlight/IdeaProjects/LightLibrary/bukkit/build/libs/LightLibraryBukkit-1.0.jar"
     ))
 }
 
-val javaLanguageVersion = JavaLanguageVersion.of(17)
+val javaLanguageVersion = JavaLanguageVersion.of(21)
 java {
     toolchain.languageVersion.set(javaLanguageVersion)
 }
@@ -54,17 +53,12 @@ tasks {
     processResources {
         val libraries = listOf(
             "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
-            "net.kyori:adventure-text-minimessage:${adventureVersion}",
-            "net.kyori:adventure-platform-bukkit:${adventureBukkitVersion}",
-            "net.kyori:adventure-text-minimessage:${adventureVersion}"
         )
         val props = mapOf(
             "pluginVersion" to version,
-            "description" to description,
             "kotlinVersion" to kotlinVersion,
-            "adventureVersion" to adventureVersion,
-            "adventureBukkitVersion" to adventureBukkitVersion,
-            "libraries" to libraries
+            "description" to project.description,
+            "libraries" to libraries,
         )
         inputs.properties(props)
         filteringCharset = "UTF-8"
