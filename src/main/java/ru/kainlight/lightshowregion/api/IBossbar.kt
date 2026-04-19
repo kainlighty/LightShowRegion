@@ -2,7 +2,7 @@ package ru.kainlight.lightshowregion.api
 
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
-import org.bukkit.scheduler.BukkitTask
+import ru.kainlight.lightlibrary.API.LightTask
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
 import ru.kainlight.lightlibrary.UTILS.Parser
 import ru.kainlight.lightshowregion.Main
@@ -13,7 +13,7 @@ class IBossbar(private val plugin: Main,
 ) : Bossbar {
 
     private var bar: BossBar? = null
-    private var task: BukkitTask? = null
+    private var task: LightTask? = null
 
     override fun toggle(): Boolean {
         return if (hide()) true else {
@@ -54,24 +54,38 @@ class IBossbar(private val plugin: Main,
         }
     }
 
-    private fun run(): BukkitTask {
+    private fun run() {
         val disabledWorlds = plugin.config.getStringList("region-settings.disabled-worlds")
         val global = plugin.getMessages().getString("bar.global")
-        val player = showedPlayer.getPlayer()
-        DebugBukkit.info("Player ${player.name} actionbar showed")
+        val player = showedPlayer.getPlayer() ?: return
 
-        return plugin.runTaskTimer(Runnable {
+        DebugBukkit.info("Player ${player.name} bossbar showed")
+
+        val updateLogic = { cancelCallback: () -> Unit ->
             if (bar == null || !player.isOnline) {
                 hide()
-                DebugBukkit.info("Bossbar task `${task?.taskId}` cancelled for ${player.name}")
-                return@Runnable
-            }
-            if (global.isNullOrEmpty() || disabledWorlds.contains(player.world.name)) return@Runnable
-
-            LightShowRegionAPI.getProvider().getRegionHandler().getCustomRegionName(player).let { title ->
+                DebugBukkit.info("Bossbar task cancelled for ${player.name}")
+                cancelCallback()
+            } else if (!global.isNullOrEmpty() && !disabledWorlds.contains(player.world.name)) {
+                val title = LightShowRegionAPI.getProvider().getRegionHandler().getCustomRegionName(player)
                 setTitle(title)
             }
-        }, 0, 20).also { task = it }
+        }
+
+        if (plugin.isFolia) {
+            val foliaTask = player.scheduler.runAtFixedRate(plugin, {
+                updateLogic { it.cancel() }
+            }, null, 1L, 20L)
+
+            // Сохраняем в наш класс. У Folia нет taskId, используем hash
+            this.task = LightTask("Folia-${foliaTask.hashCode()}") { foliaTask?.cancel() }
+        } else {
+            val bukkitTask = plugin.runTaskTimer(Runnable {
+                updateLogic { this.task?.cancel() }
+            }, 0L, 20L)
+
+            this.task = LightTask(bukkitTask.taskId.toString()) { bukkitTask.cancel() }
+        }
     }
 
     private fun setTitle(text: String?) {

@@ -29,7 +29,7 @@ class Main : LightPlugin() {
     }
 
     override fun onEnable() {
-        setLightPluginInstance()
+        this.enable()
 
         this.reloadConfigs()
 
@@ -40,9 +40,6 @@ class Main : LightPlugin() {
 
         papiExpansion = CustomPlaceholder(this)
         papiExpansion?.register()
-
-        checkUpdates()
-        enableMessage()
     }
 
     override fun onDisable() {

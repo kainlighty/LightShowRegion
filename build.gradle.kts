@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.kainlight.lightshowregion"
-version = "1.4.3"
+version = "1.4.4"
 description = "Displaying the region in the ActionBar"
 
 val kotlinVersion = "2.3.10"
@@ -28,7 +28,8 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(project(":API"))
 
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    //compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("dev.folia:folia-api:1.21.11-R0.1-SNAPSHOT")
 
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:${worldGuardVersion}")
 //    compileOnly("me.clip:placeholderapi:$papiVersion")
@@ -67,7 +68,7 @@ tasks {
         }
     }
     
-    named<ShadowJar>("shadowJar") {
+    val shadowJar = named<ShadowJar>("shadowJar") {
         archiveBaseName.set(project.name)
         archiveFileName.set("${project.name}-${project.version}.jar")
 
@@ -82,5 +83,9 @@ tasks {
         // Переименование пакетов
         val shadedPath = "ru.kainlight.${project.name.lowercase()}.shaded"
         relocate("ru.kainlight.lightlibrary", "$shadedPath.lightlibrary")
+    }
+
+    "build" {
+        dependsOn(shadowJar)
     }
 }

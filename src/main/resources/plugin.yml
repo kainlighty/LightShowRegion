@@ -2,7 +2,7 @@ name: LightShowRegion
 version: ${pluginVersion}
 main: ru.kainlight.lightshowregion.Main
 api-version: 1.17
-#folia-supported: true
+folia-supported: true
 
 authors: [ kainlight ]
 description: ${description}

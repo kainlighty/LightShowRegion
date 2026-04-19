@@ -1,6 +1,6 @@
 package ru.kainlight.lightshowregion.api
 
-import org.bukkit.scheduler.BukkitTask
+import ru.kainlight.lightlibrary.API.LightTask
 import ru.kainlight.lightlibrary.UTILS.DebugBukkit
 import ru.kainlight.lightlibrary.multiActionbar
 import ru.kainlight.lightshowregion.Main
@@ -10,7 +10,7 @@ class IActionbar(private val plugin: Main,
                  override var isActive: Boolean = false
 ) : Actionbar {
 
-    private var task: BukkitTask? = null
+    private var task: LightTask? = null
 
     override fun toggle(): Boolean {
         if(isActive) hide() else show()
@@ -32,29 +32,39 @@ class IActionbar(private val plugin: Main,
         run()
     }
 
-    private fun run(): BukkitTask {
+    private fun run() {
         task?.cancel()
         val disabledWorlds = plugin.config.getStringList("region-settings.disabled-worlds")
         val global = plugin.getMessages().getString("bar.global")
-        val player = showedPlayer.getPlayer()
+        val player = showedPlayer.getPlayer() ?: return
+
         DebugBukkit.info("Player ${player.name} actionbar showed")
 
-        val task = plugin.runTaskTimerAsynchronously(Runnable {
-
+        val updateLogic = { cancelCallback: () -> Unit ->
             if(!player.isOnline) {
                 DebugBukkit.info("Actionbar task cancelled for ${player.name} because player is offline")
                 hide()
-                return@Runnable
+                cancelCallback()
+            } else if (!global.isNullOrEmpty() && !disabledWorlds.contains(player.world.name)) {
+                val text = LightShowRegionAPI.getProvider().getRegionHandler().getCustomRegionName(player)
+                if (text != null) player.multiActionbar(text)
             }
+        }
 
-            if (global.isNullOrEmpty() || disabledWorlds.contains(player.world.name)) return@Runnable
+        if (plugin.isFolia) {
+            // В Folia всё, что работает с игроком, должно крутиться в его EntityScheduler
+            val foliaTask = player.scheduler.runAtFixedRate(plugin, {
+                updateLogic { it.cancel() }
+            }, null, 1L, 20L)
 
-            val text = LightShowRegionAPI.getProvider().getRegionHandler().getCustomRegionName(player) ?: return@Runnable
-            player.multiActionbar(text)
-        }, 0L, 20L)
+            this.task = LightTask("Folia-${foliaTask.hashCode()}") { foliaTask?.cancel() }
+        } else {
+            val bukkitTask = plugin.runTaskTimerAsynchronously(Runnable {
+                updateLogic { this.task?.cancel() }
+            }, 0L, 20L)
 
-        this.task = task
-        return task
+            this.task = LightTask(bukkitTask.taskId.toString()) { bukkitTask.cancel() }
+        }
     }
 
     override fun toString(): String {
