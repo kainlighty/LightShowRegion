@@ -17,12 +17,24 @@ class IActionbar(private val plugin: Main,
         return isActive
     }
 
-    override fun hide(): Boolean {
+    /*override fun hide(): Boolean {
         val task = task ?: return false
         task.cancel()
         this.task = null
         this.isActive = false
         DebugBukkit.info("Player ${showedPlayer.getPlayer().name} actionbar hidden")
+        return true
+    }*/
+
+    override fun hide(): Boolean {
+        // Просто безопасно вызываем отмену
+        task?.cancel()
+
+        // Очищаем состояние
+        this.task = null
+        this.isActive = false
+        DebugBukkit.info("Player ${showedPlayer.getPlayer()?.name} actionbar hidden")
+
         return true
     }
 

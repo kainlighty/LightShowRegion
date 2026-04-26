@@ -22,7 +22,7 @@ class IBossbar(private val plugin: Main,
         }
     }
 
-    override fun hide(): Boolean {
+    /*override fun hide(): Boolean {
         val currentBar = bar ?: return false
         showedPlayer.getPlayer().hideBossBar(currentBar)
         val task = task ?: return false
@@ -32,6 +32,24 @@ class IBossbar(private val plugin: Main,
         this.bar = null
         this.isActive = false
         DebugBukkit.info("Player ${showedPlayer.getPlayer().name} actionbar hidden")
+        return true
+    }*/
+
+    override fun hide(): Boolean {
+        // Безопасно скрываем боссбар, если он существует (не прерывая метод!)
+        bar?.let { currentBar ->
+            showedPlayer.getPlayer()?.hideBossBar(currentBar)
+        }
+
+        // Безопасно отменяем таску, если она записана в переменную
+        task?.cancel()
+
+        // В ЛЮБОМ СЛУЧАЕ очищаем состояние
+        this.task = null
+        this.bar = null
+        this.isActive = false
+        DebugBukkit.info("Player ${showedPlayer.getPlayer()?.name} bossbar hidden")
+
         return true
     }
 
